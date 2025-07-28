@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">urlto - Đăng Ký</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #0d1117 0%, #1a202c 100%);
+            /* Unified background */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .language-item span {
+            font-family: 'Noto Color Emoji', 'Inter', sans-serif;
+            font-size: 1.5em;
+        }
+
+        .mobile-menu-transition {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mobile-menu-transition.is-active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .dropdown-transition {
+            display: none;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .dropdown-transition.is-active {
+            display: block;
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        .form-container {
+            background-color: #1a202c;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-field {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border: 1px solid #4a5568;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+        }
+
+        .submit-button {
+            background-color: #4299e1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .submit-button:hover {
+            background-color: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .message.success {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .message.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <nav class="relative z-10 flex items-center justify-between p-4 md:p-6 lg:px-12 bg-gray-900 shadow-md">
+        <div class="flex items-center space-x-2">
+            <span id="site-name" class="text-xl md:text-2xl font-bold text-white">urlto</span>
+        </div>
+
+        <div class="md:hidden">
+            <button id="mobile-menu-button"
+                class="text-white focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-all duration-200">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="#" id="nav-home" data-i18n-key="trang-chu" data-action="go-home"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TRANG
+                CHỦ</a>
+            <a href="#" id="nav-publisher-rates" data-i18n-key="bang-gia"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẢNG
+                GIÁ</a>
+            <a href="#" id="nav-payment-proof" data-i18n-key="bang-chung-thanh-toan"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẰNG
+                CHỨNG THANH TOÁN</a>
+            <a href="#" id="nav-login" data-i18n-key="dang-nhap" data-action="go-login"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">ĐĂNG
+                NHẬP</a>
+            <a href="#" id="nav-signup" data-i18n-key="dang-ky" data-action="go-register"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200 shadow-md transform hover:scale-105">ĐĂNG
+                KÝ</a>
+            <div class="relative">
+                <button id="language-button-desktop"
+                    class="text-white text-lg cursor-pointer hover:text-blue-300 transition-colors duration-200 focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div id="language-dropdown-desktop"
+                    class="absolute top-full right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-30 dropdown-transition">
+                    <a href="#"
+                        class="flex items-center gap-2 px-4 py-2 text-white hover:bg-gray-700 rounded-t-md language-item"
+                        data-lang="vi">
+                        <span role="img" aria-label="Vietnam Flag">🇻🇳</span> Tiếng Việt
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-2 px-4 py-2 text-white hover:bg-gray-700 rounded-b-md language-item"
+                        data-lang="en">
+                        <span role="img" aria-label="USA Flag">🇺🇸</span> English
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-gray-900 bg-opacity-95 p-6 z-20 flex flex-col items-center justify-center mobile-menu-transition">
+        <div class="absolute top-4 right-4">
+            <button id="close-mobile-menu-button"
+                class="text-white focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-all duration-200">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex flex-col space-y-6 text-center w-full max-w-sm">
+            <a href="#" id="mobile-nav-home" data-i18n-key="trang-chu" data-action="go-home"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">TRANG
+                CHỦ</a>
+            <a href="#" id="mobile-nav-publisher-rates" data-i18n-key="bang-gia"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">BẢNG
+                GIÁ</a>
+            <a href="#" id="mobile-nav-payment-proof" data-i18n-key="bang-chung-thanh-toan"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">BẰNG
+                CHỨNG THANH TOÁN</a>
+            <a href="#" id="mobile-nav-login" data-i18n-key="dang-nhap" data-action="go-login"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">ĐĂNG
+                NHẬP</a>
+            <a href="#" id="mobile-nav-signup" data-i18n-key="dang-ky" data-action="go-register"
+                class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200 shadow-md w-max mx-auto transform hover:scale-105">ĐĂNG
+                KÝ</a>
+            <div class="relative w-max mx-auto">
+                <button id="language-button-mobile"
+                    class="text-white text-xl cursor-pointer hover:text-blue-300 transition-colors duration-200 mt-4 focus:outline-none py-2 px-4 rounded-md hover:bg-gray-800 flex items-center gap-2">
+                    <i class="fas fa-globe"></i> <span data-i18n-key="language-mobile-text">Ngôn ngữ</span>
+                </button>
+                <div id="language-dropdown-mobile"
+                    class="absolute w-full bg-gray-800 rounded-md shadow-inner text-center mt-2 dropdown-transition">
+                    <a href="#"
+                        class="flex items-center justify-center gap-2 px-4 py-2 text-white hover:bg-gray-700 language-item"
+                        data-lang="vi">
+                        <span role="img" aria-label="Vietnam Flag">🇻🇳</span> Tiếng Việt
+                    </a>
+                    <a href="#"
+                        class="flex items-center justify-center gap-2 px-4 py-2 text-white hover:bg-gray-700 language-item"
+                        data-lang="en">
+                        <span role="img" aria-label="USA Flag">🇺🇸</span> English
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="form-container p-8 md:p-12 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center text-white mb-8" data-i18n-key="register-title">Đăng Ký Tài Khoản
+                Mới</h2>
+            <form id="register-form" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-gray-300 text-sm font-medium mb-2"
+                        data-i18n-key="username-label">Tên đăng nhập</label>
+                    <input type="text" id="username" name="username" class="input-field" required>
+                </div>
+                <div class="relative">
+                    <label for="password" class="block text-gray-300 text-sm font-medium mb-2"
+                        data-i18n-key="password-label">Mật khẩu</label>
+                    <input type="password" id="password" name="password" class="input-field pr-10" required>
+                    <button type="button" id="toggle-password-register"
+                        class="absolute inset-y-0 right-0 top-7 flex items-center pr-3 text-gray-400 hover:text-gray-200">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+                <div class="relative">
+                    <label for="confirm-password" class="block text-gray-300 text-sm font-medium mb-2"
+                        data-i18n-key="confirm-password-label">Xác nhận mật khẩu</label>
+                    <input type="password" id="confirm-password" name="confirm-password" class="input-field pr-10"
+                        required>
+                    <button type="button" id="toggle-confirm-password-register"
+                        class="absolute inset-y-0 right-0 top-7 flex items-center pr-3 text-gray-400 hover:text-gray-200">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+                <button type="submit" class="submit-button w-full" data-i18n-key="register-button">Đăng Ký</button>
+            </form>
+            <div id="register-message" class="message"></div>
+            <p class="text-center text-gray-400 text-sm mt-6" data-i18n-key="already-have-account">
+                Đã có tài khoản?
+                <a href="#" id="go-to-login" class="text-blue-400 hover:underline" data-i18n-key="login-now">Đăng nhập
+                    ngay</a>
+            </p>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white py-10 px-4">
+        <div class="container mx-auto text-center md:flex md:justify-between md:items-center">
+            <p class="mb-4 md:mb-0 text-gray-400" data-i18n-key="copyright">&copy; 2025 <span
+                    id="footer-site-name">urlto</span>. Tất cả các quyền được bảo
+                lưu.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="hover:text-blue-300 transition-colors duration-200 text-gray-400"
+                    data-i18n-key="privacy-policy">Chính sách bảo mật</a>
+                <a href="#" class="hover:text-blue-300 transition-colors duration-200 text-gray-400"
+                    data-i18n-key="terms-of-service">Điều khoản dịch vụ</a>
+                <a href="#" class="hover:text-blue-300 transition-colors duration-200 text-gray-400"
+                    data-i18n-key="contact">Liên hệ</a>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <p class="text-gray-500 text-sm">
+                    <span data-i18n-key="developed-by">Phát triển bởi</span>
+                    <a id="author-link" href="#" target="_blank"
+                        class="text-blue-400 hover:text-blue-300 transition-colors duration-200">
+                        <span id="github-name">ShyDev</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables for backend URL and app info
+        let backendUrl = '';
+        let appInfo = {};
+        let currentLang = 'vi'; // Default language
+
+        // Map of translatable elements and their translations
+        const translatableElements = {
+            'trang-chu': {
+                'vi': 'TRANG CHỦ',
+                'en': 'HOME'
+            },
+            'bang-gia': {
+                'vi': 'BẢNG GIÁ',
+                'en': 'PUBLISHER RATES'
+            },
+            'bang-chung-thanh-toan': {
+                'vi': 'BẰNG CHỨNG THANH TOÁN',
+                'en': 'PAYMENT PROOF'
+            },
+            'dang-nhap': {
+                'vi': 'ĐĂNG NHẬP',
+                'en': 'LOGIN'
+            },
+            'dang-ky': {
+                'vi': 'ĐĂNG KÝ',
+                'en': 'SIGN UP'
+            },
+            'copyright': {
+                'vi': `&copy; 2025 %WEB_NAME%. Tất cả các quyền được bảo lưu.`,
+                'en': `&copy; 2025 %WEB_NAME%. All rights reserved.`
+            },
+            'privacy-policy': {
+                'vi': 'Chính sách bảo mật',
+                'en': 'Privacy Policy'
+            },
+            'terms-of-service': {
+                'vi': 'Điều khoản dịch vụ',
+                'en': 'Terms of Service'
+            },
+            'contact': {
+                'vi': 'Liên hệ',
+                'en': 'Contact'
+            },
+            'language-mobile-text': {
+                'vi': 'Ngôn ngữ',
+                'en': 'Language'
+            },
+            'developed-by': {
+                'vi': 'Phát triển bởi',
+                'en': 'Developed by'
+            },
+            // Register specific translations
+            'register-title': {
+                'vi': 'Đăng Ký Tài Khoản Mới',
+                'en': 'Register New Account'
+            },
+            'username-label': {
+                'vi': 'Tên đăng nhập',
+                'en': 'Username'
+            },
+            'password-label': {
+                'vi': 'Mật khẩu',
+                'en': 'Password'
+            },
+            'confirm-password-label': {
+                'vi': 'Xác nhận mật khẩu',
+                'en': 'Confirm Password'
+            },
+            'register-button': {
+                'vi': 'Đăng Ký',
+                'en': 'Register'
+            },
+            'already-have-account': {
+                'vi': 'Đã có tài khoản?',
+                'en': 'Already have an account?'
+            },
+            'login-now': {
+                'vi': 'Đăng nhập ngay',
+                'en': 'Login now'
+            },
+            'fill-all-fields-register': {
+                'vi': 'Vui lòng điền đầy đủ thông tin.',
+                'en': 'Please fill in all fields.'
+            },
+            'password-mismatch': {
+                'vi': 'Mật khẩu xác nhận không khớp.',
+                'en': 'Confirm password does not match.'
+            },
+            'password-strength': {
+                'vi': 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số.',
+                'en': 'Password must be at least 8 characters, including uppercase, lowercase, and numbers.'
+            },
+            'register-success': {
+                'vi': 'Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.',
+                'en': 'Registration successful! You can login now.'
+            },
+            'register-fail': {
+                'vi': 'Đăng ký thất bại. Vui lòng thử lại.',
+                'en': 'Registration failed. Please try again.'
+            },
+            'network-error': {
+                'vi': 'Đã xảy ra lỗi khi kết nối đến máy chủ. Vui lòng thử lại sau.',
+                'en': 'A network error occurred. Please try again later.'
+            },
+        };
+
+        // Function to apply translations
+        function translatePage(lang) {
+            currentLang = lang; // Update current language global variable
+            document.documentElement.lang = lang; // Update HTML lang attribute
+            localStorage.setItem('preferredLang', lang); // Lưu ngôn ngữ vào localStorage
+
+            for (const key in translatableElements) {
+                const elements = document.querySelectorAll(`[data-i18n-key="${key}"]`);
+                elements.forEach(element => {
+                    if (translatableElements[key] && translatableElements[key][lang]) {
+                        let text = translatableElements[key][lang];
+                        if (appInfo.webName) {
+                            text = text.replace(/%WEB_NAME%/g, appInfo.webName);
+                        } else {
+                            text = text.replace(/%WEB_NAME%/g, 'urlto');
+                        }
+
+                        if (element.tagName === 'INPUT' && element.getAttribute('placeholder') !== null) {
+                            element.placeholder = text;
+                        } else {
+                            element.innerHTML = text;
+                        }
+                    }
+                });
+            }
+
+            const titleBase = lang === 'vi' ? 'Đăng Ký' : 'Register';
+            document.getElementById('page-title').textContent = `${appInfo.webName || 'urlto'} - ${titleBase}`;
+        }
+
+        // API functions
+        async function fetchBackendDomain() {
+            try {
+                const response = await fetch('http://localhost:8080/web/domain');
+                const data = await response.json();
+                if (data.message === 'Success.' && data.data) {
+                    backendUrl = data.data;
+                    console.log('Backend URL:', backendUrl);
+                    return backendUrl;
+                }
+                throw new Error('Failed to fetch backend domain');
+            } catch (error) {
+                console.error('Error fetching backend domain:', error);
+                backendUrl = 'http://localhost:8080'; // fallback
+                console.warn('Using fallback backend URL:', backendUrl);
+                return backendUrl;
+            }
+        }
+
+        async function fetchAppInfo() {
+            if (!backendUrl) {
+                await fetchBackendDomain(); // Ensure backendUrl is set
+            }
+            try {
+                const response = await fetch(`${backendUrl}/web/infor`);
+                const data = await response.json();
+                if (data.message === 'Success.' && data.data) {
+                    appInfo = data.data;
+                    console.log('App Info:', appInfo);
+                    updatePageWithAppInfo();
+                    return appInfo;
+                }
+                throw new Error('Failed to fetch app info');
+            } catch (error) {
+                console.error('Error fetching app info:', error);
+                appInfo = {
+                    webName: 'URLto',
+                    gitHub: 'ShyDev',
+                    author: 'https://github.com/dargits'
+                };
+                updatePageWithAppInfo();
+                return appInfo;
+            }
+        }
+
+        // Function to update page with app info
+        function updatePageWithAppInfo() {
+            if (appInfo.webName) {
+                document.getElementById('site-name').textContent = appInfo.webName;
+                const titleBase = currentLang === 'vi' ? 'Đăng Ký' : 'Register';
+                document.getElementById('page-title').textContent = `${appInfo.webName} - ${titleBase}`;
+
+                const footerSiteName = document.getElementById('footer-site-name');
+                if (footerSiteName) {
+                    footerSiteName.textContent = appInfo.webName;
+                }
+            }
+
+            if (appInfo.author && appInfo.gitHub) {
+                const authorLink = document.getElementById('author-link');
+                const githubName = document.getElementById('github-name');
+
+                if (authorLink) {
+                    authorLink.href = appInfo.author;
+                }
+                if (githubName) {
+                    githubName.textContent = appInfo.gitHub;
+                }
+            }
+            // Re-apply translation after appInfo might change dynamic text placeholders
+            translatePage(currentLang);
+        }
+
+        // JavaScript for mobile menu and language dropdowns
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchBackendDomain();
+            await fetchAppInfo();
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            const languageButtonDesktop = document.getElementById('language-button-desktop');
+            const languageDropdownDesktop = document.getElementById('language-dropdown-desktop');
+            const languageButtonMobile = document.getElementById('language-button-mobile');
+            const languageDropdownMobile = document.getElementById('language-dropdown-mobile');
+
+            const registerForm = document.getElementById('register-form');
+            const registerMessage = document.getElementById('register-message');
+
+            const passwordInputRegister = document.getElementById('password');
+            const togglePasswordButtonRegister = document.getElementById('toggle-password-register');
+            const confirmPasswordInputRegister = document.getElementById('confirm-password');
+            const toggleConfirmPasswordButtonRegister = document.getElementById('toggle-confirm-password-register');
+
+            // Khởi tạo ngôn ngữ: Ưu tiên từ localStorage, sau đó là ngôn ngữ trình duyệt, cuối cùng là 'vi'
+            const storedLang = localStorage.getItem('preferredLang');
+            const userLang = navigator.language.split('-')[0];
+            currentLang = (storedLang && (storedLang === 'vi' || storedLang === 'en')) ? storedLang :
+                ((userLang === 'vi' || userLang === 'en') ? userLang : 'vi');
+            translatePage(currentLang); // Ensure initial translation applies after appInfo is loaded
+
+
+            // --- Navigation Link Handlers ---
+            const homeLinks = document.querySelectorAll('[data-action="go-home"]');
+            homeLinks.forEach(link => {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = backendUrl; // Navigate to the base domain
+                    } else {
+                        console.error('Backend URL not available for home navigation.');
+                    }
+                });
+            });
+
+            const navLoginLink = document.getElementById('nav-login');
+            const mobileNavLoginLink = document.getElementById('mobile-nav-login');
+            if (navLoginLink) {
+                navLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/login`;
+                    }
+                });
+            }
+            if (mobileNavLoginLink) {
+                mobileNavLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/login`;
+                    }
+                });
+            }
+
+            const navSignupLink = document.getElementById('nav-signup');
+            const mobileNavSignupLink = document.getElementById('mobile-nav-signup');
+            if (navSignupLink) {
+                navSignupLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/register`;
+                    }
+                });
+            }
+            if (mobileNavSignupLink) {
+                mobileNavSignupLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/register`;
+                    }
+                });
+            }
+
+            const goToLoginLink = document.getElementById('go-to-login');
+            if (goToLoginLink) {
+                goToLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/login`;
+                    }
+                });
+            }
+
+            // --- Show/Hide Password Toggles ---
+            function setupPasswordToggle(inputElement, toggleButton) {
+                if (toggleButton && inputElement) {
+                    toggleButton.addEventListener('click', () => {
+                        const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
+                        inputElement.setAttribute('type', type);
+                        toggleButton.querySelector('i').classList.toggle('fa-eye');
+                        toggleButton.querySelector('i').classList.toggle('fa-eye-slash');
+                    });
+                }
+            }
+
+            setupPasswordToggle(passwordInputRegister, togglePasswordButtonRegister);
+            setupPasswordToggle(confirmPasswordInputRegister, toggleConfirmPasswordButtonRegister);
+
+
+            // Handle Register Form Submission
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                hideMessage(registerMessage);
+
+                const username = registerForm.username.value.trim();
+                const password = registerForm.password.value.trim();
+                const confirmPassword = registerForm['confirm-password'].value.trim();
+
+                if (!username || !password || !confirmPassword) {
+                    showMessage(registerMessage, translatableElements['fill-all-fields-register'][currentLang], 'error');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showMessage(registerMessage, translatableElements['password-mismatch'][currentLang], 'error');
+                    return;
+                }
+
+                // Password strength check
+                if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+                    showMessage(registerMessage, translatableElements['password-strength'][currentLang], 'error');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${backendUrl}/auth/register`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.message === 'Success.') {
+                        showMessage(registerMessage, translatableElements['register-success'][currentLang], 'success');
+                        // Optionally, save token if registration returns one, or just redirect to login
+                        if (data.token) {
+                            localStorage.setItem('jwt_token', data.token); // Save token if backend provides it
+                            console.log('JWT Token stored after registration:', data.token);
+                        }
+                        setTimeout(() => {
+                            window.location.href = `${backendUrl}/auth/login`; // Redirect to login page after registration
+                        }, 2000);
+                    } else {
+                        showMessage(registerMessage, data.message || translatableElements['register-fail'][currentLang], 'error');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showMessage(registerMessage, translatableElements['network-error'][currentLang], 'error');
+                }
+            });
+
+            // Error and success message functions
+            function showMessage(element, message, type) {
+                element.textContent = message;
+                element.className = `message ${type}`;
+                element.style.display = 'block';
+            }
+
+            function hideMessage(element) {
+                element.style.display = 'none';
+                element.textContent = '';
+                element.className = 'message';
+            }
+
+            // Mobile Menu Logic
+            if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.add('is-active');
+                });
+
+                closeMobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.remove('is-active');
+                });
+
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) {
+                        mobileMenu.classList.remove('is-active');
+                    }
+                });
+            }
+
+            // Toggle language dropdown for desktop
+            if (languageButtonDesktop && languageDropdownDesktop) {
+                languageButtonDesktop.addEventListener('click', (event) => {
+                    languageDropdownDesktop.classList.toggle('is-active');
+                    event.stopPropagation();
+                });
+
+                languageDropdownDesktop.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const lang = link.getAttribute('data-lang');
+                        translatePage(lang);
+                        languageDropdownDesktop.classList.remove('is-active');
+                        event.stopPropagation();
+                    });
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!languageDropdownDesktop.contains(event.target) && !languageButtonDesktop.contains(event.target)) {
+                        languageDropdownDesktop.classList.remove('is-active');
+                    }
+                });
+            }
+
+            // Toggle language dropdown for mobile
+            if (languageButtonMobile && languageDropdownMobile) {
+                languageButtonMobile.addEventListener('click', (event) => {
+                    languageDropdownMobile.classList.toggle('is-active');
+                    event.stopPropagation();
+                });
+
+                languageDropdownMobile.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const lang = link.getAttribute('data-lang');
+                        translatePage(lang);
+                        languageDropdownMobile.classList.remove('is-active');
+                        mobileMenu.classList.remove('is-active');
+                        event.stopPropagation();
+                    });
+                });
+
+                document.addEventListener('click', (event) => {
+                    const isClickInsideMobileMenu = mobileMenu.contains(event.target);
+                    const isClickOnMobileLangButton = languageButtonMobile.contains(event.target);
+                    const isClickInsideMobileLangDropdown = languageDropdownMobile.contains(event.target);
+
+                    if (!isClickOnMobileLangButton && !isClickInsideMobileLangDropdown) {
+                        languageDropdownMobile.classList.remove('is-active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

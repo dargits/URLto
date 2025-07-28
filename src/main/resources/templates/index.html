@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">urlto - Rút gọn link, kiếm tiền</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #0d1117;
+        }
+
+        /* Apply Noto Color Emoji to specific elements or globally if needed */
+        .language-item span {
+            font-family: 'Noto Color Emoji', 'Inter', sans-serif;
+            /* Prioritize Noto Color Emoji for flags */
+            font-size: 1.5em;
+            /* Make emoji flags larger */
+        }
+
+        .hero-background {
+            background: linear-gradient(180deg, #0d1117 0%, #1a202c 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes moveClouds {
+            0% {
+                transform: translateX(-100%) translateY(0px);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translateX(150%) translateY(5px);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translateX(-100%) translateY(0px);
+                opacity: 0.8;
+            }
+        }
+
+        .cloud {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            position: absolute;
+            filter: blur(15px);
+            z-index: 0;
+            animation: moveClouds linear infinite;
+        }
+
+        .cloud-1 {
+            width: 180px;
+            height: 180px;
+            bottom: -70px;
+            animation-duration: 60s;
+            animation-delay: 0s;
+        }
+
+        .cloud-2 {
+            width: 240px;
+            height: 240px;
+            bottom: -100px;
+            animation-duration: 70s;
+            animation-delay: -15s;
+        }
+
+        .cloud-3 {
+            width: 200px;
+            height: 200px;
+            bottom: -80px;
+            animation-duration: 65s;
+            animation-delay: -30s;
+        }
+
+        .cloud-4 {
+            width: 280px;
+            height: 280px;
+            bottom: -110px;
+            animation-duration: 75s;
+            animation-delay: -45s;
+        }
+
+        @media (min-width: 768px) {
+            .cloud-1 {
+                width: 300px;
+                height: 300px;
+                bottom: -120px;
+            }
+
+            .cloud-2 {
+                width: 380px;
+                height: 380px;
+                bottom: -150px;
+            }
+
+            .cloud-3 {
+                width: 320px;
+                height: 320px;
+                bottom: -130px;
+            }
+
+            .cloud-4 {
+                width: 420px;
+                height: 420px;
+                bottom: -180px;
+            }
+        }
+
+        @keyframes fadeInSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes textHighlightPulse {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+            }
+
+            50% {
+                text-shadow: 0 0 15px rgba(255, 255, 0, 1), 0 0 20px rgba(255, 255, 0, 0.8);
+            }
+
+            100% {
+                text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+            }
+        }
+
+        .animate-hero-text {
+            animation: fadeInSlideUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .animate-delay-0-3s {
+            animation-delay: 0.3s;
+        }
+
+        .animate-delay-0-6s {
+            animation-delay: 0.6s;
+        }
+
+        .animate-delay-0-9s {
+            animation-delay: 0.9s;
+        }
+
+        .text-yellow-300.animated-glow {
+            animation: textHighlightPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-url-input {
+            animation: fadeInScale 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: 1.2s;
+            opacity: 0;
+        }
+
+        .card-hover-effect:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-hover-effect {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .mobile-menu-transition {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mobile-menu-transition.is-active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Simplified dropdown transition for immediate interactivity */
+        .dropdown-transition {
+            display: none;
+            /* Hidden by default */
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            /* Still allow visual transition */
+        }
+
+        .dropdown-transition.is-active {
+            display: block;
+            /* Instantly visible and interactive */
+            max-height: 200px;
+            /* Adjust based on content height */
+            opacity: 1;
+        }
+
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .error-message {
+            color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="hero-background text-white relative">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="cloud cloud-4"></div>
+
+        <nav class="relative z-10 flex items-center justify-between p-4 md:p-6 lg:px-12 bg-gray-900 shadow-md">
+            <div class="flex items-center space-x-2">
+                <span id="site-name" class="text-xl md:text-2xl font-bold text-white">urlto</span>
+            </div>
+
+            <div class="md:hidden">
+                <button id="mobile-menu-button"
+                    class="text-white focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-all duration-200">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" id="nav-home" data-i18n-key="trang-chu" data-action="go-home"
+                    class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TRANG
+                    CHỦ</a>
+                <a href="#" id="nav-publisher-rates" data-i18n-key="bang-gia"
+                    class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẢNG
+                    GIÁ</a>
+                <a href="#" id="nav-payment-proof" data-i18n-key="bang-chung-thanh-toan"
+                    class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẰNG
+                    CHỨNG THANH TOÁN</a>
+                <a href="#" id="nav-login" data-i18n-key="dang-nhap" data-action="go-login"
+                    class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">ĐĂNG
+                    NHẬP</a>
+                <a href="#" id="nav-signup" data-i18n-key="dang-ky" data-action="go-register"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200 shadow-md transform hover:scale-105">ĐĂNG
+                    KÝ</a>
+                <div class="relative">
+                    <button id="language-button-desktop"
+                        class="text-white text-lg cursor-pointer hover:text-blue-300 transition-colors duration-200 focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20">
+                        <i class="fas fa-globe"></i>
+                    </button>
+                    <div id="language-dropdown-desktop"
+                        class="absolute top-full right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-30 dropdown-transition">
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-2 text-white hover:bg-gray-700 rounded-t-md language-item"
+                            data-lang="vi">
+                            <span role="img" aria-label="Vietnam Flag">🇻🇳</span> Tiếng Việt
+                        </a>
+                        <a href="#"
+                            class="flex items-center gap-2 px-4 py-2 text-white hover:bg-gray-700 rounded-b-md language-item"
+                            data-lang="en">
+                            <span role="img" aria-label="USA Flag">🇺🇸</span> English
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div id="mobile-menu"
+            class="fixed inset-0 bg-gray-900 bg-opacity-95 p-6 z-20 flex flex-col items-center justify-center mobile-menu-transition">
+            <div class="absolute top-4 right-4">
+                <button id="close-mobile-menu-button"
+                    class="text-white focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-all duration-200">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-6 text-center w-full max-w-sm">
+                <a href="#" id="mobile-nav-home" data-i18n-key="trang-chu" data-action="go-home"
+                    class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">TRANG
+                    CHỦ</a>
+                <a href="#" id="mobile-nav-publisher-rates" data-i18n-key="bang-gia"
+                    class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">BẢNG
+                    GIÁ</a>
+                <a href="#" id="mobile-nav-payment-proof" data-i18n-key="bang-chung-thanh-toan"
+                    class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">BẰNG
+                    CHỨNG THANH TOÁN</a>
+                <a href="#" id="mobile-nav-login" data-i18n-key="dang-nhap" data-action="go-login"
+                    class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">ĐĂNG
+                    NHẬP</a>
+                <a href="#" id="mobile-nav-signup" data-i18n-key="dang-ky" data-action="go-register"
+                    class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200 shadow-md w-max mx-auto transform hover:scale-105">ĐĂNG
+                    KÝ</a>
+                <div class="relative w-max mx-auto">
+                    <button id="language-button-mobile"
+                        class="text-white text-xl cursor-pointer hover:text-blue-300 transition-colors duration-200 mt-4 focus:outline-none py-2 px-4 rounded-md hover:bg-gray-800 flex items-center gap-2">
+                        <i class="fas fa-globe"></i> <span data-i18n-key="language-mobile-text">Ngôn ngữ</span>
+                    </button>
+                    <div id="language-dropdown-mobile"
+                        class="absolute w-full bg-gray-800 rounded-md shadow-inner text-center mt-2 dropdown-transition">
+                        <a href="#"
+                            class="flex items-center justify-center gap-2 px-4 py-2 text-white hover:bg-gray-700 language-item"
+                            data-lang="vi">
+                            <span role="img" aria-label="Vietnam Flag">🇻🇳</span> Tiếng Việt
+                        </a>
+                        <a href="#"
+                            class="flex items-center justify-center gap-2 px-4 py-2 text-white hover:bg-gray-700 language-item"
+                            data-lang="en">
+                            <span role="img" aria-label="USA Flag">🇺🇸</span> English
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative z-10 flex-grow flex flex-col items-center justify-center text-center p-4">
+            <h1
+                class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-2 md:mb-4 animate-hero-text animate-delay-0-3s">
+                <span data-i18n-key="hero-heading-1">Rút gọn URL và</span>
+                <br class="hidden sm:inline">
+                <span class="text-yellow-300 drop-shadow-lg animated-glow" data-i18n-key="hero-heading-2">KIẾM
+                    TIỀN</span>
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl font-semibold mb-6 md:mb-8 animate-hero-text animate-delay-0-6s"
+                data-i18n-key="hero-subheading">NHẬN NGAY $1 TIỀN THƯỞNG KHI ĐĂNG KÝ!</p>
+
+            <div
+                class="w-full max-w-sm md:max-w-xl flex items-center bg-gray-700 bg-opacity-80 rounded-full shadow-lg overflow-hidden animate-url-input focus-within:ring-4 focus-within:ring-blue-500 transition-all duration-300">
+                <input type="text" id="url-input-field" placeholder="URL của bạn tại đây"
+                    data-i18n-key="url-placeholder"
+                    class="flex-grow py-3 px-6 text-white placeholder-gray-300 focus:outline-none text-base md:text-lg rounded-l-full bg-transparent">
+                <button id="shorten-btn"
+                    class="bg-blue-600 hover:bg-blue-700 transition-colors duration-200 text-white p-3 md:p-4 rounded-r-full focus:outline-none transform hover:scale-105 active:scale-95 shadow-md">
+                    <i class="fas fa-arrow-right text-lg md:text-xl"></i>
+                </button>
+            </div>
+            <div id="error-message" class="error-message">
+                <span data-i18n-key="error-message"></span>
+            </div>
+        </div>
+    </div>
+
+    <section class="bg-gray-900 py-16 md:py-24 text-white">
+        <div class="container mx-auto px-4 text-center max-w-6xl">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-8 text-blue-400" data-i18n-key="section-title">
+                <span id="section-title-name">urlto</span> - Giải pháp rút gọn link thông minh & hiệu quả
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed mb-12 max-w-3xl mx-auto text-gray-300"
+                data-i18n-key="section-description">
+                <span id="section-description-name">urlto</span> không chỉ là công cụ rút gọn link, mà còn là nền tảng
+                giúp bạn biến lưu lượng truy cập thành thu
+                nhập. Chúng tôi cung cấp công cụ mạnh mẽ, thống kê chi tiết và hệ thống thanh toán minh bạch, đáng tin
+                cậy.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-left">
+                <div class="p-8 bg-gray-800 rounded-xl shadow-lg card-hover-effect border border-gray-700">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 bg-blue-600 text-white rounded-full mb-6 mx-auto md:mx-0 transform rotate-45">
+                        <i class="fas fa-dollar-sign text-3xl -rotate-45"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-blue-300" data-i18n-key="feature-1-title">Thu nhập tối ưu
+                    </h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n-key="feature-1-desc">Kiếm tiền dễ dàng từ mỗi
+                        lượt nhấp vào liên kết rút gọn của bạn. Tỷ lệ CPM cạnh tranh và thanh toán đúng hạn.</p>
+                </div>
+                <div class="p-8 bg-gray-800 rounded-xl shadow-lg card-hover-effect border border-gray-700">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 bg-green-600 text-white rounded-full mb-6 mx-auto md:mx-0 transform rotate-45">
+                        <i class="fas fa-chart-line text-3xl -rotate-45"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-green-300" data-i18n-key="feature-2-title">Báo cáo chuyên
+                        sâu</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n-key="feature-2-desc">Hệ thống thống kê thời gian
+                        thực cung cấp cái nhìn sâu sắc về hiệu suất liên kết và nguồn truy cập của bạn.</p>
+                </div>
+                <div class="p-8 bg-gray-800 rounded-xl shadow-lg card-hover-effect border border-gray-700">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 bg-purple-600 text-white rounded-full mb-6 mx-auto md:mx-0 transform rotate-45">
+                        <i class="fas fa-shield-alt text-3xl -rotate-45"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-purple-300" data-i18n-key="feature-3-title">Bảo mật vượt
+                        trội</h3>
+                    <p class="text-gray-400 leading-relaxed" data-i18n-key="feature-3-desc">Bảo vệ tài khoản và dữ liệu
+                        của bạn với các biện pháp bảo mật tiên tiến nhất, đảm bảo an toàn tuyệt đối.</p>
+                </div>
+            </div>
+            <a href="#"
+                class="inline-block mt-12 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 text-lg"
+                data-i18n-key="start-earning">
+                Bắt đầu kiếm tiền ngay!
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="bg-gray-800 py-16 md:py-24 text-white">
+        <div class="container mx-auto px-4 text-center max-w-6xl">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-12 text-blue-300" data-i18n-key="testimonials-title">
+                Khách hàng nói gì về chúng tôi?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div
+                    class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
+                    <img src="images/elonmusk.jpg" alt="Avatar User 1"
+                        class="w-20 h-20 rounded-full mb-4 ring-2 ring-blue-400 object-cover">
+                    <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-1-quote">"Urlto đã thay đổi
+                        cách tôi kiếm tiền online. Nền tảng tuyệt vời với hệ thống thanh toán minh bạch!"</p>
+                    <p class="font-bold text-blue-300" data-i18n-key="testimonial-1-author">Nguyễn Văn A</p>
+                    <p class="text-gray-400 text-sm" data-i18n-key="testimonial-1-role">Chủ blog công nghệ</p>
+                </div>
+                <div
+                    class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
+                    <img src="images/itguy.jpg" alt="Avatar User 2"
+                        class="w-20 h-20 rounded-full mb-4 ring-2 ring-red-400 object-cover">
+                    <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-2-quote">"Giao diện thân
+                        thiện, dễ sử dụng. Tôi đã tăng thu nhập đáng kể từ khi chuyển sang Urlto."</p>
+                    <p class="font-bold text-red-300" data-i18n-key="testimonial-2-author">Trần Thị Lan</p>
+                    <p class="text-gray-400 text-sm" data-i18n-key="testimonial-2-role">Người sáng tạo nội dung</p>
+                </div>
+                <div
+                    class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
+                    <img src="images/men.jpg" alt="Avatar User 3"
+                        class="w-20 h-20 rounded-full mb-4 ring-2 ring-green-400 object-cover">
+                    <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-3-quote">"Hệ thống thống kê
+                        chi tiết và đội ngũ hỗ trợ nhiệt tình. Rất khuyến khích cho bất kỳ ai muốn kiếm tiền từ link."
+                    </p>
+                    <p class="font-bold text-green-300" data-i18n-key="testimonial-3-author">Lê Chí Khang</p>
+                    <p class="text-gray-400 text-sm" data-i18n-key="testimonial-3-role">Quản trị viên diễn đàn</p>
+                </div>
+                <div
+                    class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
+                    <img src="images/girl.jpg" alt="Avatar User 4"
+                        class="w-20 h-20 rounded-full mb-4 ring-2 ring-yellow-400 object-cover">
+                    <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-4-quote">"Urlto là công cụ
+                        không thể thiếu của tôi để tối ưu hóa thu nhập từ các liên kết. Rất hài lòng với các tính năng
+                        và hỗ trợ khách hàng!"</p>
+                    <p class="font-bold text-yellow-300" data-i18n-key="testimonial-4-author">Phạm Thị Thanh</p>
+                    <p class="text-gray-400 text-sm" data-i18n-key="testimonial-4-role">Chuyên gia tiếp thị liên kết</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black text-white py-10 px-4">
+        <div class="container mx-auto text-center md:flex md:justify-between md:items-center">
+            <p class="mb-4 md:mb-0 text-gray-400" data-i18n-key="copyright">&copy; 2025 <span
+                    id="footer-site-name">urlto</span>. Tất cả các quyền được bảo
+                lưu.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="hover:text-blue-300 transition-colors duration-200 text-gray-400"
+                    data-i18n-key="privacy-policy">Chính sách bảo mật</a>
+                <a href="#" class="hover:text-blue-300 transition-colors duration-200 text-gray-400"
+                    data-i18n-key="terms-of-service">Điều khoản dịch vụ</a>
+                <a href="#" class="hover:text-blue-300 transition-colors duration-200 text-gray-400"
+                    data-i18n-key="contact">Liên hệ</a>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <p class="text-gray-500 text-sm">
+                    <span data-i18n-key="developed-by">Phát triển bởi</span>
+                    <a id="author-link" href="#" target="_blank"
+                        class="text-blue-400 hover:text-blue-300 transition-colors duration-200">
+                        <span id="github-name">ShyDev</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables for backend URL and app info
+        let backendUrl = '';
+        let appInfo = {};
+        let currentLang = 'vi'; // Default language
+
+        // Map of translatable elements and their translations (initially with placeholders)
+        const translatableElements = {
+            'trang-chu': {
+                'vi': 'TRANG CHỦ',
+                'en': 'HOME'
+            },
+            'bang-gia': {
+                'vi': 'BẢNG GIÁ',
+                'en': 'PUBLISHER RATES'
+            },
+            'bang-chung-thanh-toan': {
+                'vi': 'BẰNG CHỨNG THANH TOÁN',
+                'en': 'PAYMENT PROOF'
+            },
+            'dang-nhap': {
+                'vi': 'ĐĂNG NHẬP',
+                'en': 'LOGIN'
+            },
+            'dang-ky': {
+                'vi': 'ĐĂNG KÝ',
+                'en': 'SIGN UP'
+            },
+            'hero-heading-1': {
+                'vi': 'Rút gọn URL và',
+                'en': 'Shorten URLs and'
+            },
+            'hero-heading-2': {
+                'vi': 'KIẾM TIỀN',
+                'en': 'EARN MONEY'
+            },
+            'hero-subheading': {
+                'vi': 'NHẬN NGAY $1 TIỀN THƯỞNG KHI ĐĂNG KÝ!',
+                'en': 'GET $1 BONUS FOR SIGN UP!'
+            },
+            'url-placeholder': {
+                'vi': 'URL của bạn tại đây',
+                'en': 'Your URL Here'
+            },
+            'section-title': {
+                'vi': `%WEB_NAME% - Giải pháp rút gọn link thông minh & hiệu quả`,
+                'en': `%WEB_NAME% - Smart & Effective URL Shortening Solution`
+            },
+            'section-description': {
+                'vi': `%WEB_NAME% không chỉ là công cụ rút gọn link, mà còn là nền tảng giúp bạn biến lưu lượng truy cập thành thu nhập. Chúng tôi cung cấp công cụ mạnh mẽ, thống kê chi tiết và hệ thống thanh toán minh bạch, đáng tin cậy.`,
+                'en': `%WEB_NAME% is not just a URL shortening tool; it's a platform that helps you turn your traffic into income. We provide powerful tools, detailed statistics, and a transparent, reliable payment system.`
+            },
+            'feature-1-title': {
+                'vi': 'Thu nhập tối ưu',
+                'en': 'Optimized Earnings'
+            },
+            'feature-1-desc': {
+                'vi': 'Kiếm tiền dễ dàng từ mỗi lượt nhấp vào liên kết rút gọn của bạn. Tỷ lệ CPM cạnh tranh và thanh toán đúng hạn.',
+                'en': 'Earn easily from every click on your shortened links. Competitive CPM rates and timely payments.'
+            },
+            'feature-2-title': {
+                'vi': 'Báo cáo chuyên sâu',
+                'en': 'In-depth Reporting'
+            },
+            'feature-2-desc': {
+                'vi': 'Hệ thống thống kê thời gian thực cung cấp cái nhìn sâu sắc về hiệu suất liên kết và nguồn truy cập của bạn.',
+                'en': 'Real-time statistics system provides deep insights into your link performance and traffic sources.'
+            },
+            'feature-3-title': {
+                'vi': 'Bảo mật vượt trội',
+                'en': 'Superior Security'
+            },
+            'feature-3-desc': {
+                'vi': 'Bảo vệ tài khoản và dữ liệu của bạn với các biện pháp bảo mật tiên tiến nhất, đảm bảo an toàn tuyệt đối.',
+                'en': 'Protect your account and data with the most advanced security measures, ensuring absolute safety.'
+            },
+            'start-earning': {
+                'vi': 'Bắt đầu kiếm tiền ngay!',
+                'en': 'Start earning now!'
+            },
+            'copyright': {
+                'vi': `&copy; 2025 %WEB_NAME%. Tất cả các quyền được bảo lưu.`,
+                'en': `&copy; 2025 %WEB_NAME%. All rights reserved.`
+            },
+            'privacy-policy': {
+                'vi': 'Chính sách bảo mật',
+                'en': 'Privacy Policy'
+            },
+            'terms-of-service': {
+                'vi': 'Điều khoản dịch vụ',
+                'en': 'Terms of Service'
+            },
+            'contact': {
+                'vi': 'Liên hệ',
+                'en': 'Contact'
+            },
+            'language-mobile-text': {
+                'vi': 'Ngôn ngữ',
+                'en': 'Language'
+            },
+            'developed-by': {
+                'vi': 'Phát triển bởi',
+                'en': 'Developed by'
+            },
+            'error-message': {
+                'vi': 'Vui lòng nhập URL hợp lệ',
+                'en': 'Please enter a valid URL'
+            },
+            'testimonials-title': {
+                'vi': 'Khách hàng nói gì về chúng tôi?',
+                'en': 'What Our Users Say?'
+            },
+            'testimonial-1-quote': {
+                'vi': 'Urlto đã thay đổi cách tôi kiếm tiền online. Nền tảng tuyệt vời với hệ thống thanh toán minh bạch!',
+                'en': 'Urlto has changed the way I earn online. A great platform with a transparent payment system!'
+            },
+            'testimonial-1-author': {
+                'vi': 'Nguyễn Văn A',
+                'en': 'John Doe'
+            },
+            'testimonial-1-role': {
+                'vi': 'Chủ blog công nghệ',
+                'en': 'Tech Blog Owner'
+            },
+            'testimonial-2-quote': {
+                'vi': 'Giao diện thân thiện, dễ sử dụng. Tôi đã tăng thu nhập đáng kể từ khi chuyển sang Urlto.',
+                'en': 'User-friendly interface, easy to use. My income has significantly increased since switching to Urlto.'
+            },
+            'testimonial-2-author': {
+                'vi': 'Trần Thị Lan',
+                'en': 'Jane Smith'
+            },
+            'testimonial-2-role': {
+                'vi': 'Người sáng tạo nội dung',
+                'en': 'Content Creator'
+            },
+            'testimonial-3-quote': {
+                'vi': 'Hệ thống thống kê chi tiết và đội ngũ hỗ trợ nhiệt tình. Rất khuyến khích cho bất kỳ ai muốn kiếm tiền từ link.',
+                'en': 'Detailed statistics system and enthusiastic support team. Highly recommended for anyone looking to earn from links.'
+            },
+            'testimonial-3-author': {
+                'vi': 'Lê Chí Khang',
+                'en': 'Peter Jones'
+            },
+            'testimonial-3-role': {
+                'vi': 'Quản trị viên diễn đàn',
+                'en': 'Forum Administrator'
+            },
+            'testimonial-4-quote': { // New testimonial quote
+                'vi': 'Urlto là công cụ không thể thiếu của tôi để tối ưu hóa thu nhập từ các liên kết. Rất hài lòng với các tính năng và hỗ trợ khách hàng!',
+                'en': 'Urlto is my essential tool for optimizing link income. Very satisfied with the features and customer support!'
+            },
+            'testimonial-4-author': { // New testimonial author
+                'vi': 'Phạm Thị Thanh',
+                'en': 'Alice Johnson'
+            },
+            'testimonial-4-role': { // New testimonial role
+                'vi': 'Chuyên gia tiếp thị liên kết',
+                'en': 'Affiliate Marketer'
+            }
+        };
+
+        // Function to apply translations (GLOBAL SCOPE)
+        function translatePage(lang) {
+            console.log('Translating page to:', lang); // Debugging log
+            currentLang = lang; // Update current language global variable
+            document.documentElement.lang = lang; // Update HTML lang attribute
+            localStorage.setItem('preferredLang', lang); // Lưu ngôn ngữ vào localStorage
+
+            for (const key in translatableElements) {
+                const elements = document.querySelectorAll(`[data-i18n-key="${key}"]`);
+                elements.forEach(element => {
+                    if (translatableElements[key] && translatableElements[key][lang]) {
+                        let text = translatableElements[key][lang];
+                        // Replace %WEB_NAME% placeholder with actual appInfo.webName
+                        if (appInfo.webName) {
+                            text = text.replace(/%WEB_NAME%/g, appInfo.webName);
+                        } else {
+                            // Fallback if appInfo.webName is not yet available
+                            text = text.replace(/%WEB_NAME%/g, 'urlto');
+                        }
+
+                        if (element.tagName === 'INPUT' && element.getAttribute('placeholder') !== null) {
+                            element.placeholder = text;
+                        } else {
+                            element.innerHTML = text;
+                        }
+                    }
+                });
+            }
+
+            const titleText = lang === 'vi' ? 'Rút gọn link, kiếm tiền' : 'Shorten URLs, Earn Money';
+            document.getElementById('page-title').textContent = `${appInfo.webName || 'urlto'} - ${titleText}`;
+        }
+
+        // API functions
+        async function fetchBackendDomain() {
+            try {
+                // Using a relative path or the current origin if backend is on the same domain
+                const response = await fetch('/web/domain');
+                const data = await response.json();
+                if (data.message === 'Success.' && data.data) {
+                    backendUrl = data.data;
+                    console.log('Backend URL:', backendUrl);
+                    return backendUrl;
+                }
+                throw new Error('Failed to fetch backend domain');
+            } catch (error) {
+                console.error('Error fetching backend domain:', error);
+                // Fallback to a hardcoded local development URL if API fails
+                backendUrl = 'http://localhost:8080';
+                console.warn('Using fallback backend URL:', backendUrl);
+                return backendUrl;
+            }
+        }
+
+        async function fetchAppInfo() {
+            if (!backendUrl) {
+                await fetchBackendDomain(); // Ensure backendUrl is set
+            }
+            try {
+                const response = await fetch(`${backendUrl}/web/infor`);
+                const data = await response.json();
+                if (data.message === 'Success.' && data.data) {
+                    appInfo = data.data;
+                    console.log('App Info:', appInfo);
+                    updatePageWithAppInfo();
+                    return appInfo;
+                }
+                throw new Error('Failed to fetch app info');
+            } catch (error) {
+                console.error('Error fetching app info:', error);
+                appInfo = {
+                    webName: 'URLto',
+                    gitHub: 'ShyDev',
+                    author: 'https://github.com/dargits'
+                };
+                updatePageWithAppInfo();
+                return appInfo;
+            }
+        }
+
+        // Function to update page with app info
+        function updatePageWithAppInfo() {
+            if (appInfo.webName) {
+                document.getElementById('site-name').textContent = appInfo.webName;
+                const titleText = currentLang === 'vi' ? 'Rút gọn link, kiếm tiền' : 'Shorten URLs, Earn Money';
+                document.getElementById('page-title').textContent = `${appInfo.webName} - ${titleText}`;
+
+                const sectionTitleName = document.getElementById('section-title-name');
+                if (sectionTitleName) {
+                    sectionTitleName.textContent = appInfo.webName;
+                }
+
+                const sectionDescName = document.getElementById('section-description-name');
+                if (sectionDescName) {
+                    sectionDescName.textContent = appInfo.webName;
+                }
+
+                const footerSiteName = document.getElementById('footer-site-name');
+                if (footerSiteName) {
+                    footerSiteName.textContent = appInfo.webName;
+                }
+            }
+
+            if (appInfo.author && appInfo.gitHub) {
+                const authorLink = document.getElementById('author-link');
+                const githubName = document.getElementById('github-name');
+
+                if (authorLink) {
+                    authorLink.href = appInfo.author;
+                }
+                if (githubName) {
+                    githubName.textContent = appInfo.gitHub;
+                }
+            }
+            // Re-apply translation after appInfo might change dynamic text placeholders
+            translatePage(currentLang);
+        }
+
+        async function handleShortenUrl() {
+            if (!backendUrl) {
+                showError(currentLang === 'vi' ? 'Không thể xác định địa chỉ backend. Vui lòng thử lại.' : 'Could not determine backend address. Please try again.');
+                return;
+            }
+            // Directly redirect to the registration page
+            window.location.href = `${backendUrl}/auth/register`;
+
+            shortenBtn.disabled = true;
+            shortenBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-lg md:text-xl"></i>';
+            showSuccess(currentLang === 'vi' ? 'Đang chuyển hướng đến trang đăng ký...' : 'Redirecting to registration page...');
+        }
+
+
+        // Error and success message functions
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            errorMessage.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+            errorMessage.style.color = '#ef4444';
+        }
+
+        function showSuccess(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            errorMessage.style.backgroundColor = 'rgba(34, 197, 94, 0.1)';
+            errorMessage.style.color = '#22c55e';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+
+        // JavaScript for mobile menu and language dropdowns
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize backend URL first, then app info
+            await fetchBackendDomain();
+            await fetchAppInfo(); // This will also call updatePageWithAppInfo and translatePage
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const shortenBtn = document.getElementById('shorten-btn');
+            const urlInput = document.getElementById('url-input-field');
+            const errorMessage = document.getElementById('error-message');
+
+            const languageButtonDesktop = document.getElementById('language-button-desktop');
+            const languageDropdownDesktop = document.getElementById('language-dropdown-desktop');
+            const languageButtonMobile = document.getElementById('language-button-mobile');
+            const languageDropdownMobile = document.getElementById('language-dropdown-mobile');
+
+            // Khởi tạo ngôn ngữ: Ưu tiên từ localStorage, sau đó là ngôn ngữ trình duyệt, cuối cùng là 'vi'
+            const storedLang = localStorage.getItem('preferredLang');
+            const userLang = navigator.language.split('-')[0];
+            currentLang = (storedLang && (storedLang === 'vi' || storedLang === 'en')) ? storedLang :
+                ((userLang === 'vi' || userLang === 'en') ? userLang : 'vi');
+
+            translatePage(currentLang); // Đảm bảo dịch trang ban đầu với ngôn ngữ ưu tiên
+
+            // --- Navigation Link Handlers ---
+            const homeLinks = document.querySelectorAll('[data-action="go-home"]');
+            homeLinks.forEach(link => {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = backendUrl; // Navigate to the base domain
+                    } else {
+                        console.error('Backend URL not available for home navigation.');
+                    }
+                });
+            });
+
+            const navLoginLink = document.getElementById('nav-login');
+            const mobileNavLoginLink = document.getElementById('mobile-nav-login');
+            if (navLoginLink) {
+                navLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/login`;
+                    }
+                });
+            }
+            if (mobileNavLoginLink) {
+                mobileNavLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/login`;
+                    }
+                });
+            }
+
+            const navSignupLink = document.getElementById('nav-signup');
+            const mobileNavSignupLink = document.getElementById('mobile-nav-signup');
+            if (navSignupLink) {
+                navSignupLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/register`;
+                    }
+                });
+            }
+            if (mobileNavSignupLink) {
+                mobileNavSignupLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/auth/register`;
+                    }
+                });
+            }
+
+            // Event listeners for URL shortening
+            if (shortenBtn) {
+                shortenBtn.addEventListener('click', handleShortenUrl);
+            }
+
+            // Mobile Menu Logic
+            if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.add('is-active');
+                });
+
+                closeMobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.remove('is-active');
+                });
+
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) {
+                        mobileMenu.classList.remove('is-active');
+                    }
+                });
+            }
+
+            // Toggle language dropdown for desktop
+            if (languageButtonDesktop && languageDropdownDesktop) {
+                languageButtonDesktop.addEventListener('click', (event) => {
+                    console.log('Desktop language button clicked'); // Debugging log
+                    languageDropdownDesktop.classList.toggle('is-active');
+                    event.stopPropagation(); // Prevent document click from immediately closing
+                });
+
+                languageDropdownDesktop.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const lang = link.getAttribute('data-lang');
+                        console.log('Desktop language item clicked, lang:', lang); // Debugging log
+                        translatePage(lang);
+                        languageDropdownDesktop.classList.remove('is-active');
+                        event.stopPropagation(); // Prevent document click from closing it after selection
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener('click', (event) => {
+                    if (!languageDropdownDesktop.contains(event.target) && !languageButtonDesktop.contains(event.target)) {
+                        languageDropdownDesktop.classList.remove('is-active');
+                    }
+                });
+            }
+
+            // Toggle language dropdown for mobile
+            if (languageButtonMobile && languageDropdownMobile) {
+                languageButtonMobile.addEventListener('click', (event) => {
+                    console.log('Mobile language button clicked'); // Debugging log
+                    languageDropdownMobile.classList.toggle('is-active');
+                    event.stopPropagation(); // Prevent document click from immediately closing
+                });
+
+                languageDropdownMobile.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const lang = link.getAttribute('data-lang');
+                        console.log('Mobile language item clicked, lang:', lang); // Debugging log
+                        translatePage(lang);
+                        languageDropdownMobile.classList.remove('is-active');
+                        mobileMenu.classList.remove('is-active'); // Close mobile menu if language selected within it
+                        event.stopPropagation(); // Prevent document click from closing it after selection
+                    });
+                });
+
+                // Close dropdown if clicked outside its area or mobile menu.
+                document.addEventListener('click', (event) => {
+                    const isClickInsideMobileMenu = mobileMenu.contains(event.target);
+                    const isClickOnMobileLangButton = languageButtonMobile.contains(event.target);
+                    const isClickInsideMobileLangDropdown = languageDropdownMobile.contains(event.target);
+
+                    // If mobile menu is active, and click is outside button and dropdown, close dropdown.
+                    // If mobile menu is not active, but somehow dropdown is open, and click is outside button and dropdown, close dropdown.
+                    if (!isClickOnMobileLangButton && !isClickInsideMobileLangDropdown) {
+                        languageDropdownMobile.classList.remove('is-active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
