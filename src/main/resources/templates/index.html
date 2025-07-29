@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -432,40 +432,40 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div
                     class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
-                    <img src="images/elonmusk.jpg" alt="Avatar User 1"
+                    <img th:src="@{/images/elonmusk.jpg}" alt="Avatar User 1"
                         class="w-20 h-20 rounded-full mb-4 ring-2 ring-blue-400 object-cover">
                     <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-1-quote">"Urlto đã thay đổi
                         cách tôi kiếm tiền online. Nền tảng tuyệt vời với hệ thống thanh toán minh bạch!"</p>
-                    <p class="font-bold text-blue-300" data-i18n-key="testimonial-1-author">Nguyễn Văn A</p>
-                    <p class="text-gray-400 text-sm" data-i18n-key="testimonial-1-role">Chủ blog công nghệ</p>
+                    <p class="font-bold text-blue-300" data-i18n-key="testimonial-1-author">Elon musk</p>
+                    <p class="text-gray-400 text-sm" data-i18n-key="testimonial-1-role">Giám đốc</p>
                 </div>
                 <div
                     class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
-                    <img src="images/itguy.jpg" alt="Avatar User 2"
+                    <img th:src="@{/images/itguy.jpg}" alt="Avatar User 2"
                         class="w-20 h-20 rounded-full mb-4 ring-2 ring-red-400 object-cover">
                     <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-2-quote">"Giao diện thân
                         thiện, dễ sử dụng. Tôi đã tăng thu nhập đáng kể từ khi chuyển sang Urlto."</p>
-                    <p class="font-bold text-red-300" data-i18n-key="testimonial-2-author">Trần Thị Lan</p>
+                    <p class="font-bold text-red-300" data-i18n-key="testimonial-2-author">Jonathan james</p>
                     <p class="text-gray-400 text-sm" data-i18n-key="testimonial-2-role">Người sáng tạo nội dung</p>
                 </div>
                 <div
                     class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
-                    <img src="images/men.jpg" alt="Avatar User 3"
+                    <img th:src="@{/images/men.jpg}" alt="Avatar User 3"
                         class="w-20 h-20 rounded-full mb-4 ring-2 ring-green-400 object-cover">
                     <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-3-quote">"Hệ thống thống kê
                         chi tiết và đội ngũ hỗ trợ nhiệt tình. Rất khuyến khích cho bất kỳ ai muốn kiếm tiền từ link."
                     </p>
-                    <p class="font-bold text-green-300" data-i18n-key="testimonial-3-author">Lê Chí Khang</p>
+                    <p class="font-bold text-green-300" data-i18n-key="testimonial-3-author">Alvares junio</p>
                     <p class="text-gray-400 text-sm" data-i18n-key="testimonial-3-role">Quản trị viên diễn đàn</p>
                 </div>
                 <div
                     class="bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center text-center card-hover-effect border border-gray-600">
-                    <img src="images/girl.jpg" alt="Avatar User 4"
+                    <img th:src="@{/images/girl.jpg}" alt="Avatar User 4"
                         class="w-20 h-20 rounded-full mb-4 ring-2 ring-yellow-400 object-cover">
                     <p class="text-gray-200 text-lg mb-4 italic" data-i18n-key="testimonial-4-quote">"Urlto là công cụ
                         không thể thiếu của tôi để tối ưu hóa thu nhập từ các liên kết. Rất hài lòng với các tính năng
                         và hỗ trợ khách hàng!"</p>
-                    <p class="font-bold text-yellow-300" data-i18n-key="testimonial-4-author">Phạm Thị Thanh</p>
+                    <p class="font-bold text-yellow-300" data-i18n-key="testimonial-4-author">Mohamed lily</p>
                     <p class="text-gray-400 text-sm" data-i18n-key="testimonial-4-role">Chuyên gia tiếp thị liên kết</p>
                 </div>
             </div>

@@ -22,5 +22,4 @@ public class WebControler {
     public String register() {
         return "auth/register.html";
     }
-
 }
