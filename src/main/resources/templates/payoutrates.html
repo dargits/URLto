@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">urlto - Đăng Ký</title>
+    <title id="page-title">urlto - Bảng Giá</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
@@ -22,11 +22,15 @@
             min-height: 100vh;
         }
 
+        /* Apply Noto Color Emoji to specific elements or globally if needed */
         .language-item span {
             font-family: 'Noto Color Emoji', 'Inter', sans-serif;
+            /* Prioritize Noto Color Emoji for flags */
             font-size: 1.5em;
+            /* Make emoji flags larger */
         }
 
+        /* Navbar and Dropdown styles */
         .mobile-menu-transition {
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
             transform: translateY(-100%);
@@ -42,74 +46,88 @@
 
         .dropdown-transition {
             display: none;
+            /* Hidden by default */
             max-height: 0;
             opacity: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            /* Still allow visual transition */
         }
 
         .dropdown-transition.is-active {
             display: block;
+            /* Instantly visible and interactive */
             max-height: 200px;
+            /* Adjust based on content height */
             opacity: 1;
         }
 
-        .form-container {
-            background-color: #1a202c;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        .input-field {
-            background-color: #2d3748;
-            color: #e2e8f0;
-            border: 1px solid #4a5568;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
+        /* Table specific styles */
+        .rates-table {
             width: 100%;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-        }
-
-        .submit-button {
-            background-color: #4299e1;
-            color: white;
-            padding: 0.75rem 1.5rem;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
             border-radius: 0.5rem;
-            font-weight: 600;
-            transition: background-color 0.2s, transform 0.2s;
+            overflow: hidden;
+            /* Ensures rounded corners apply to content */
         }
 
-        .submit-button:hover {
-            background-color: #3182ce;
-            transform: translateY(-2px);
-        }
-
-        .submit-button:active {
-            transform: translateY(0);
-        }
-
-        .message {
+        .rates-table th,
+        .rates-table td {
             padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-            display: none;
-            text-align: center;
+            text-align: left;
+            border-bottom: 1px solid #2d3748;
+            /* Darker border for rows */
         }
 
-        .message.success {
-            background-color: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
+        .rates-table th {
+            background-color: #2d3748;
+            /* Darker header background */
+            color: #e2e8f0;
+            /* Light text for headers */
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            /* text-sm */
         }
 
-        .message.error {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+        .rates-table td {
+            background-color: #1a202c;
+            /* Table cell background */
+            color: #cbd5e0;
+            /* Light gray text for content */
+        }
+
+        .rates-table tbody tr:last-child td {
+            border-bottom: none;
+            /* No border for the last row */
+        }
+
+        .rates-table tbody tr:hover td {
+            background-color: #2d3748;
+            /* Hover effect for rows */
+        }
+
+        /* Specific style for the "Worldwide Deal" row */
+        .rates-table tbody tr.worldwide-deal td {
+            font-weight: 700;
+            /* font-bold */
+            color: #4299e1;
+            /* text-blue-400 */
+        }
+
+        /* Country flag styling */
+        .country-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .country-item img {
+            width: 24px;
+            /* Adjust flag size */
+            height: auto;
+            border-radius: 2px;
         }
     </style>
 </head>
@@ -129,10 +147,10 @@
         </div>
 
         <div class="hidden md:flex items-center space-x-6">
-            <a href="#" id="nav-home" data-i18n-key="trang-chu" data-action="go-home"
+            <a href="${backendUrl}" id="nav-home" data-i18n-key="trang-chu" data-action="go-home"
                 class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TRANG
                 CHỦ</a>
-            <a href="${backendUrl}/payout-rates" id="nav-publisher-rates" data-i18n-key="bang-gia"
+            <a href="#" id="nav-publisher-rates" data-action="go-payout-rates"
                 class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẢNG
                 GIÁ</a>
             <a href="#" id="nav-payment-proof" data-i18n-key="bang-chung-thanh-toan"
@@ -175,7 +193,7 @@
             </button>
         </div>
         <div class="flex flex-col space-y-6 text-center w-full max-w-sm">
-            <a href="#" id="mobile-nav-home" data-i18n-key="trang-chu" data-action="go-home"
+            <a href="${backendUrl}" id="mobile-nav-home" data-i18n-key="trang-chu" data-action="go-home"
                 class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">TRANG
                 CHỦ</a>
             <a href="#" id="mobile-nav-publisher-rates" data-action="go-payout-rates"
@@ -213,44 +231,171 @@
         </div>
     </div>
 
-    <main class="flex-grow flex items-center justify-center p-4">
-        <div class="form-container p-8 md:p-12 w-full max-w-md">
-            <h2 class="text-3xl font-bold text-center text-white mb-8" data-i18n-key="register-title">Đăng Ký Tài Khoản
-                Mới</h2>
-            <form id="register-form" class="space-y-6">
-                <div>
-                    <label for="username" class="block text-gray-300 text-sm font-medium mb-2"
-                        data-i18n-key="username-label">Tên đăng nhập</label>
-                    <input type="text" id="username" name="username" class="input-field" required>
-                </div>
-                <div class="relative">
-                    <label for="password" class="block text-gray-300 text-sm font-medium mb-2"
-                        data-i18n-key="password-label">Mật khẩu</label>
-                    <input type="password" id="password" name="password" class="input-field pr-10" required>
-                    <button type="button" id="toggle-password-register"
-                        class="absolute inset-y-0 right-0 top-7 flex items-center pr-3 text-gray-400 hover:text-gray-200">
-                        <i class="far fa-eye"></i>
-                    </button>
-                </div>
-                <div class="relative">
-                    <label for="confirm-password" class="block text-gray-300 text-sm font-medium mb-2"
-                        data-i18n-key="confirm-password-label">Xác nhận mật khẩu</label>
-                    <input type="password" id="confirm-password" name="confirm-password" class="input-field pr-10"
-                        required>
-                    <button type="button" id="toggle-confirm-password-register"
-                        class="absolute inset-y-0 right-0 top-7 flex items-center pr-3 text-gray-400 hover:text-gray-200">
-                        <i class="far fa-eye"></i>
-                    </button>
-                </div>
-                <button type="submit" class="submit-button w-full" data-i18n-key="register-button">Đăng Ký</button>
-            </form>
-            <div id="register-message" class="message"></div>
-            <p class="text-center text-gray-400 text-sm mt-6" data-i18n-key="already-have-account">
-                Đã có tài khoản?
-                <a href="${backendUrl}/auth/login" id="go-to-login" class="text-blue-400 hover:underline"
-                    data-i18n-key="login-now">Đăng nhập
-                    ngay</a>
-            </p>
+    <main class="flex-grow flex flex-col items-center justify-start p-4 md:p-8">
+        <div class="w-full max-w-4xl bg-gray-800 p-6 md:p-8 rounded-lg shadow-xl text-white">
+            <h2 class="text-3xl font-bold text-center mb-6" data-i18n-key="why-choose-us-title">Tại sao chọn chúng tôi?
+            </h2>
+
+            <ul class="list-disc list-inside space-y-2 mb-8 text-gray-300 text-lg">
+                <li data-i18n-key="why-choose-us-1">Nhận $1 tiền thưởng khi ĐĂNG KÝ</li>
+                <li data-i18n-key="why-choose-us-2">Tỷ lệ CPM cao nhất thế giới.</li>
+                <li data-i18n-key="why-choose-us-3">Không có quảng cáo Pop-up gây phiền nhiễu.</li>
+                <li data-i18n-key="why-choose-us-4">Thanh toán nhanh từ 2 đến 5 ngày. (Đối với lần thanh toán đầu tiên
+                    sẽ hoàn thành trong vòng 1 - 2 ngày)</li>
+                <li data-i18n-key="why-choose-us-5">Phương thức thanh toán: PayPal, Payeer, UPI, BKash, OVO, DANA,
+                    Airtm, USDT, Chuyển khoản ngân hàng,...</li>
+                <li data-i18n-key="why-choose-us-6">Hỗ trợ 24/7 qua Email hoặc Telegram</li>
+                <li data-i18n-key="why-choose-us-7">Xem Bằng chứng thanh toán tại: <a
+                        href="https://droplink.co/payment-proof" target="_blank"
+                        class="text-blue-400 hover:underline">Url.to/payment-proof</a></li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-center mb-6" data-i18n-key="earnings-table-title">Bảng Giá Kiếm Tiền</h3>
+
+            <div class="overflow-x-auto rounded-lg">
+                <table class="rates-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n-key="table-header-country">Mô tả gói / Quốc gia</th>
+                            <th data-i18n-key="table-header-desktop">Máy tính để bàn</th>
+                            <th data-i18n-key="table-header-mobile">Di động / Máy tính bảng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/us.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=US';"
+                                        alt="United States Flag"> United States</span></td>
+                            <td>$20.0000</td>
+                            <td>$20.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/nl.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=NL';"
+                                        alt="Netherlands Flag"> Netherlands</span></td>
+                            <td>$18.0000</td>
+                            <td>$18.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/gb.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=GB';"
+                                        alt="United Kingdom Flag"> United Kingdom</span></td>
+                            <td>$18.0000</td>
+                            <td>$18.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/au.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=AU';"
+                                        alt="Australia Flag"> Australia</span></td>
+                            <td>$18.0000</td>
+                            <td>$18.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/ca.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=CA';"
+                                        alt="Canada Flag"> Canada</span></td>
+                            <td>$17.0000</td>
+                            <td>$17.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/de.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=DE';"
+                                        alt="Germany Flag"> Germany</span></td>
+                            <td>$17.0000</td>
+                            <td>$17.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/br.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=BR';"
+                                        alt="Brazil Flag"> Brazil</span></td>
+                            <td>$17.0000</td>
+                            <td>$17.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/mx.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=MX';"
+                                        alt="Mexico Flag"> Mexico</span></td>
+                            <td>$10.0000</td>
+                            <td>$10.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/jp.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=JP';"
+                                        alt="Japan Flag"> Japan</span></td>
+                            <td>$10.0000</td>
+                            <td>$10.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/it.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=IT';"
+                                        alt="Italy Flag"> Italy</span></td>
+                            <td>$10.0000</td>
+                            <td>$10.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/sa.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=SA';"
+                                        alt="Saudi Arabia Flag"> Saudi Arabia</span></td>
+                            <td>$10.0000</td>
+                            <td>$10.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/es.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=ES';"
+                                        alt="Spain Flag"> Spain</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/my.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=MY';"
+                                        alt="Malaysia Flag"> Malaysia</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/bd.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=BD';"
+                                        alt="Bangladesh Flag"> Bangladesh</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/in.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=IN';"
+                                        alt="India Flag"> India</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/id.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=ID';"
+                                        alt="Indonesia Flag"> Indonesia</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/vn.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=VN';"
+                                        alt="Vietnam Flag"> Vietnam</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr>
+                            <td><span class="country-item"><img src="https://flagcdn.com/eg.svg"
+                                        onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=EG';"
+                                        alt="Egypt Flag"> Egypt</span></td>
+                            <td>$9.0000</td>
+                            <td>$9.0000</td>
+                        </tr>
+                        <tr class="worldwide-deal">
+                            <td data-i18n-key="worldwide-deal">Worldwide Deal (All Countries)</td>
+                            <td>$8.0000</td>
+                            <td>$8.0000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -331,59 +476,59 @@
                 'vi': 'Phát triển bởi',
                 'en': 'Developed by'
             },
-            // Register specific translations
-            'register-title': {
-                'vi': 'Đăng Ký Tài Khoản Mới',
-                'en': 'Register New Account'
+            // Publisher Rates specific translations
+            'why-choose-us-title': {
+                'vi': 'Tại sao chọn chúng tôi?',
+                'en': 'Why choose us?'
             },
-            'username-label': {
-                'vi': 'Tên đăng nhập',
-                'en': 'Username'
+            'why-choose-us-1': {
+                'vi': 'Nhận $1 tiền thưởng khi ĐĂNG KÝ',
+                'en': 'Get $1 bonus for SIGN UP'
             },
-            'password-label': {
-                'vi': 'Mật khẩu',
-                'en': 'Password'
+            'why-choose-us-2': {
+                'vi': 'Tỷ lệ CPM cao nhất thế giới.',
+                'en': 'Highest CPM rate in the world.'
             },
-            'confirm-password-label': {
-                'vi': 'Xác nhận mật khẩu',
-                'en': 'Confirm Password'
+            'why-choose-us-3': {
+                'vi': 'Không có quảng cáo Pop-up gây phiền nhiễu.',
+                'en': 'No annoying Pop-up ads.'
             },
-            'register-button': {
-                'vi': 'Đăng Ký',
-                'en': 'Register'
+            'why-choose-us-4': {
+                'vi': 'Thanh toán nhanh từ 2 đến 5 ngày. (Đối với lần thanh toán đầu tiên sẽ hoàn thành trong vòng 1 - 2 ngày)',
+                'en': 'Quick payment 2 to 5 day. (For the first payment will be completed within 1 - 2 days)'
             },
-            'already-have-account': {
-                'vi': 'Đã có tài khoản?',
-                'en': 'Already have an account?'
+            'why-choose-us-5': {
+                'vi': 'Phương thức thanh toán: PayPal, Payeer, UPI, BKash, OVO, DANA, Airtm, USDT, Chuyển khoản ngân hàng,...',
+                'en': 'Payment Method: PayPal, Payeer, UPI, BKash, OVO, DANA, Airtm, USDT, Bank Transfer,...'
             },
-            'login-now': {
-                'vi': 'Đăng nhập ngay',
-                'en': 'Login now'
+            'why-choose-us-6': {
+                'vi': 'Hỗ trợ 24/7 qua Email hoặc Telegram',
+                'en': 'Support 24/7 via Email or Telegram'
             },
-            'fill-all-fields-register': {
-                'vi': 'Vui lòng điền đầy đủ thông tin.',
-                'en': 'Please fill in all fields.'
+            'why-choose-us-7': {
+                'vi': 'Xem Bằng chứng thanh toán tại: ',
+                'en': 'View Proof of Payment at: '
             },
-            'password-mismatch': {
-                'vi': 'Mật khẩu xác nhận không khớp.',
-                'en': 'Confirm password does not match.'
+            'earnings-table-title': {
+                'vi': 'Bảng Giá Kiếm Tiền',
+                'en': 'Earnings Rates Table'
             },
-            'password-strength': {
-                'vi': 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số.',
-                'en': 'Password must be at least 8 characters, including uppercase, lowercase, and numbers.'
+            'table-header-country': {
+                'vi': 'Mô tả gói / Quốc gia',
+                'en': 'Package Description / Country'
             },
-            'register-success': {
-                'vi': 'Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.',
-                'en': 'Registration successful! You can login now.'
+            'table-header-desktop': {
+                'vi': 'Máy tính để bàn',
+                'en': 'Desktop'
             },
-            'register-fail': {
-                'vi': 'Đăng ký thất bại. Vui lòng thử lại.', // Generic fallback
-                'en': 'Registration failed. Please try again.' // Generic fallback
+            'table-header-mobile': {
+                'vi': 'Di động / Máy tính bảng',
+                'en': 'Mobile / Tablet'
             },
-            'network-error': {
-                'vi': 'Đã xảy ra lỗi khi kết nối đến máy chủ. Vui lòng thử lại sau.',
-                'en': 'A network error occurred. Please try again later.'
-            },
+            'worldwide-deal': {
+                'vi': 'Ưu đãi toàn cầu (Tất cả các quốc gia)',
+                'en': 'Worldwide Deal (All Countries)'
+            }
         };
 
         // Function to apply translations
@@ -397,22 +542,35 @@
                 elements.forEach(element => {
                     if (translatableElements[key] && translatableElements[key][lang]) {
                         let text = translatableElements[key][lang];
+                        // Replace %WEB_NAME% placeholder with actual appInfo.webName
                         if (appInfo.webName) {
                             text = text.replace(/%WEB_NAME%/g, appInfo.webName);
                         } else {
+                            // Fallback if appInfo.webName is not yet available
                             text = text.replace(/%WEB_NAME%/g, 'urlto');
                         }
 
                         if (element.tagName === 'INPUT' && element.getAttribute('placeholder') !== null) {
                             element.placeholder = text;
                         } else {
-                            element.innerHTML = text;
+                            // For the payment proof link, only update the text content, not the entire innerHTML
+                            if (key === 'why-choose-us-7') {
+                                // Find the text node or create one if it doesn't exist
+                                const textNode = Array.from(element.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+                                if (textNode) {
+                                    textNode.nodeValue = text;
+                                } else {
+                                    element.prepend(document.createTextNode(text));
+                                }
+                            } else {
+                                element.innerHTML = text;
+                            }
                         }
                     }
                 });
             }
 
-            const titleBase = lang === 'vi' ? 'Đăng Ký' : 'Register';
+            const titleBase = lang === 'vi' ? 'Bảng Giá' : 'Publisher Rates';
             document.getElementById('page-title').textContent = `${appInfo.webName || 'urlto'} - ${titleBase}`;
         }
 
@@ -465,7 +623,7 @@
         function updatePageWithAppInfo() {
             if (appInfo.webName) {
                 document.getElementById('site-name').textContent = appInfo.webName;
-                const titleBase = currentLang === 'vi' ? 'Đăng Ký' : 'Register';
+                const titleBase = currentLang === 'vi' ? 'Bảng Giá' : 'Publisher Rates';
                 document.getElementById('page-title').textContent = `${appInfo.webName} - ${titleBase}`;
 
                 const footerSiteName = document.getElementById('footer-site-name');
@@ -489,24 +647,6 @@
             translatePage(currentLang);
         }
 
-        // Hàm để phân tích cú pháp chuỗi lỗi validation từ backend (ví dụ: "{password=Mật khẩu quá ngắn}")
-        function parseValidationErrors(errorString) {
-            const errors = [];
-            if (errorString && errorString.startsWith('{') && errorString.endsWith('}')) {
-                const cleanedString = errorString.substring(1, errorString.length - 1); // Loại bỏ dấu {}
-                const pairs = cleanedString.split(', '); // Tách thành các cặp key=value
-                pairs.forEach(pair => {
-                    const parts = pair.split('=');
-                    if (parts.length > 1) {
-                        // Lấy phần thông báo lỗi sau dấu '=' đầu tiên
-                        const errorMessage = parts.slice(1).join('=');
-                        errors.push(errorMessage);
-                    }
-                });
-            }
-            return errors;
-        }
-
         // JavaScript for mobile menu and language dropdowns
         document.addEventListener('DOMContentLoaded', async () => {
             await fetchBackendDomain();
@@ -520,14 +660,6 @@
             const languageDropdownDesktop = document.getElementById('language-dropdown-desktop');
             const languageButtonMobile = document.getElementById('language-button-mobile');
             const languageDropdownMobile = document.getElementById('language-dropdown-mobile');
-
-            const registerForm = document.getElementById('register-form');
-            const registerMessage = document.getElementById('register-message');
-
-            const passwordInputRegister = document.getElementById('password');
-            const togglePasswordButtonRegister = document.getElementById('toggle-password-register');
-            const confirmPasswordInputRegister = document.getElementById('confirm-password');
-            const toggleConfirmPasswordButtonRegister = document.getElementById('toggle-confirm-password-register');
 
             // Khởi tạo ngôn ngữ: Ưu tiên từ localStorage, sau đó là ngôn ngữ trình duyệt, cuối cùng là 'vi'
             const storedLang = localStorage.getItem('preferredLang');
@@ -550,164 +682,6 @@
                 });
             });
 
-            const navLoginLink = document.getElementById('nav-login');
-            const mobileNavLoginLink = document.getElementById('mobile-nav-login');
-            if (navLoginLink) {
-                navLoginLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (backendUrl) {
-                        window.location.href = `${backendUrl}/auth/login`;
-                    }
-                });
-            }
-            if (mobileNavLoginLink) {
-                mobileNavLoginLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (backendUrl) {
-                        window.location.href = `${backendUrl}/auth/login`;
-                    }
-                });
-            }
-
-            const navSignupLink = document.getElementById('nav-signup');
-            const mobileNavSignupLink = document.getElementById('mobile-nav-signup');
-            if (navSignupLink) {
-                navSignupLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (backendUrl) {
-                        window.location.href = `${backendUrl}/auth/register`;
-                    }
-                });
-            }
-            if (mobileNavSignupLink) {
-                mobileNavSignupLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (backendUrl) {
-                        window.location.href = `${backendUrl}/auth/register`;
-                    }
-                });
-            }
-
-            const goToLoginLink = document.getElementById('go-to-login');
-            if (goToLoginLink) {
-                goToLoginLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (backendUrl) {
-                        window.location.href = `${backendUrl}/auth/login`;
-                    }
-                });
-            }
-
-            // --- Show/Hide Password Toggles ---
-            function setupPasswordToggle(inputElement, toggleButton) {
-                if (toggleButton && inputElement) {
-                    toggleButton.addEventListener('click', () => {
-                        const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
-                        inputElement.setAttribute('type', type);
-                        toggleButton.querySelector('i').classList.toggle('fa-eye');
-                        toggleButton.querySelector('i').classList.toggle('fa-eye-slash');
-                    });
-                }
-            }
-
-            setupPasswordToggle(passwordInputRegister, togglePasswordButtonRegister);
-            setupPasswordToggle(confirmPasswordInputRegister, toggleConfirmPasswordButtonRegister);
-
-
-            // Handle Register Form Submission
-            registerForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                hideMessage(registerMessage);
-
-                const username = registerForm.username.value.trim();
-                const password = registerForm.password.value.trim();
-                const confirmPassword = registerForm['confirm-password'].value.trim();
-
-                if (!username || !password || !confirmPassword) {
-                    showMessage(registerMessage, translatableElements['fill-all-fields-register'][currentLang], 'error');
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    showMessage(registerMessage, translatableElements['password-mismatch'][currentLang], 'error');
-                    return;
-                }
-
-                // Password strength check (optional, but good practice for frontend validation)
-                // if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-                //     showMessage(registerMessage, translatableElements['password-strength'][currentLang], 'error');
-                //     return;
-                // }
-
-                try {
-                    const response = await fetch(`${backendUrl}/api/v1/auth/register`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            account: username,
-                            password: password,
-                            confirmPassword: confirmPassword
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) { // HTTP status 2xx (Success)
-                        if (data.message === 'Success.') {
-                            showMessage(registerMessage, translatableElements['register-success'][currentLang], 'success');
-                            if (data.data) {
-                                localStorage.setItem('jwt_token', data.data);
-                                console.log('JWT Token stored after registration:', data.data);
-                            }
-                            setTimeout(() => {
-                                window.location.href = `${backendUrl}/auth/login`; // Chuyển hướng đến trang đăng nhập sau khi đăng ký
-                            }, 2000);
-                        } else {
-                            showMessage(registerMessage, data.message || translatableElements['register-fail'][currentLang], 'error');
-                        }
-                    } else { // HTTP status là lỗi (ví dụ: 400)
-                        let displayMessage = translatableElements['register-fail'][currentLang]; // Thông báo lỗi mặc định
-
-                        // Kiểm tra nếu phản hồi là BaseResponse với lỗi validation trong trường 'data'
-                        if (data && data.message === 'Fail.' && typeof data.data === 'string') {
-                            const validationErrors = parseValidationErrors(data.data);
-                            if (validationErrors.length > 0) {
-                                // Hiển thị tất cả các thông báo validation, mỗi thông báo trên một dòng mới
-                                displayMessage = validationErrors.join('<br>');
-                            } else {
-                                // Nếu data.data là chuỗi nhưng không phải lỗi validation parse được
-                                displayMessage = data.data;
-                            }
-                        } else if (data && data.message) {
-                            // Nếu phản hồi là ErrorResponse hoặc có trường message trực tiếp
-                            displayMessage = data.message;
-                        }
-
-                        showMessage(registerMessage, displayMessage, 'error');
-                        // Tùy chọn: bạn có thể sử dụng data.code ở đây cho logic client-side cụ thể hơn
-                        // console.error('Registration error code:', data.code);
-                    }
-                } catch (error) {
-                    console.error('Registration error:', error);
-                    showMessage(registerMessage, translatableElements['network-error'][currentLang], 'error');
-                }
-            });
-
-            // Error and success message functions
-            function showMessage(element, message, type) {
-                element.innerHTML = message; // Sử dụng innerHTML để hiển thị <br>
-                element.className = `message ${type}`;
-                element.style.display = 'block';
-            }
-
-            function hideMessage(element) {
-                element.style.display = 'none';
-                element.textContent = '';
-                element.className = 'message';
-            }
-
             const payout_rates = document.querySelectorAll('[data-action="go-payout-rates"]');
             payout_rates.forEach(link => {
                 link.addEventListener('click', async (e) => {
@@ -720,6 +694,69 @@
                     }
                 });
             });
+
+            const navLoginLink = document.getElementById('nav-login');
+            const mobileNavLoginLink = document.getElementById('mobile-nav-login');
+            if (navLoginLink) {
+                // Update href directly in HTML for consistency with other links
+                navLoginLink.href = `${backendUrl}/auth/login`;
+                navLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = navLoginLink.href;
+                });
+            }
+            if (mobileNavLoginLink) {
+                // Update href directly in HTML for consistency with other links
+                mobileNavLoginLink.href = `${backendUrl}/auth/login`;
+                mobileNavLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = mobileNavLoginLink.href;
+                });
+            }
+
+            const navSignupLink = document.getElementById('nav-signup');
+            const mobileNavSignupLink = document.getElementById('mobile-nav-signup');
+            if (navSignupLink) {
+                // Update href directly in HTML for consistency with other links
+                navSignupLink.href = `${backendUrl}/auth/register`;
+                navSignupLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = navSignupLink.href;
+                });
+            }
+            if (mobileNavSignupLink) {
+                // Update href directly in HTML for consistency with other links
+                mobileNavSignupLink.href = `${backendUrl}/auth/register`;
+                mobileNavSignupLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = mobileNavSignupLink.href;
+                });
+            }
+
+            const navPublisherRatesLink = document.getElementById('nav-publisher-rates');
+            const mobileNavPublisherRatesLink = document.getElementById('mobile-nav-publisher-rates');
+
+            if (navPublisherRatesLink) {
+                // Update href to match WebControler.java mapping
+                navPublisherRatesLink.href = `${backendUrl}/payoutrates`;
+                navPublisherRatesLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = navPublisherRatesLink.href;
+                    }
+                });
+            }
+            if (mobileNavPublisherRatesLink) {
+                // Update href to match WebControler.java mapping
+                mobileNavPublisherRatesLink.href = `${backendUrl}/payoutrates`;
+                mobileNavPublisherRatesLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = mobileNavPublisherRatesLink.href;
+                    }
+                });
+            }
+
 
             // Mobile Menu Logic
             if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
@@ -742,7 +779,7 @@
             if (languageButtonDesktop && languageDropdownDesktop) {
                 languageButtonDesktop.addEventListener('click', (event) => {
                     languageDropdownDesktop.classList.toggle('is-active');
-                    event.stopPropagation();
+                    event.stopPropagation(); // Prevent document click from immediately closing
                 });
 
                 languageDropdownDesktop.querySelectorAll('a').forEach(link => {
@@ -751,10 +788,11 @@
                         const lang = link.getAttribute('data-lang');
                         translatePage(lang);
                         languageDropdownDesktop.classList.remove('is-active');
-                        event.stopPropagation();
+                        event.stopPropagation(); // Prevent document click from closing it after selection
                     });
                 });
 
+                // Close dropdown if clicked outside
                 document.addEventListener('click', (event) => {
                     if (!languageDropdownDesktop.contains(event.target) && !languageButtonDesktop.contains(event.target)) {
                         languageDropdownDesktop.classList.remove('is-active');
@@ -766,7 +804,7 @@
             if (languageButtonMobile && languageDropdownMobile) {
                 languageButtonMobile.addEventListener('click', (event) => {
                     languageDropdownMobile.classList.toggle('is-active');
-                    event.stopPropagation();
+                    event.stopPropagation(); // Prevent document click from immediately closing
                 });
 
                 languageDropdownMobile.querySelectorAll('a').forEach(link => {
@@ -775,11 +813,12 @@
                         const lang = link.getAttribute('data-lang');
                         translatePage(lang);
                         languageDropdownMobile.classList.remove('is-active');
-                        mobileMenu.classList.remove('is-active');
-                        event.stopPropagation();
+                        mobileMenu.classList.remove('is-active'); // Close mobile menu if language selected within it
+                        event.stopPropagation(); // Prevent document click from closing it after selection
                     });
                 });
 
+                // Close dropdown if clicked outside its area or mobile menu.
                 document.addEventListener('click', (event) => {
                     const isClickInsideMobileMenu = mobileMenu.contains(event.target);
                     const isClickOnMobileLangButton = languageButtonMobile.contains(event.target);

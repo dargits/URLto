@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import app.urlto.webcontants.Webcontants;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -41,10 +43,11 @@ public class SecurityConfig {
                                                                                                               // hợp
                                                                                                               // JWT)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll() // Các endpoint liên quan đến xác thực (đăng ký, đăng
-                                                                 // nhập) được phép truy cập công khai
-                        .requestMatchers("/v1/user/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
+                        // .requestMatchers("/auth/**").permitAll() // Các endpoint liên quan đến xác
+                        // thực (đăng ký, đăng
+                        // // nhập) được phép truy cập công khai
+                        .requestMatchers(Webcontants.LINK_API_V1_PATH + "/**").hasAnyRole("USER", "ADMIN")
+                        // .requestMatchers("/v1/admin/**").hasRole("ADMIN")
 
                         // Các endpoint bắt đầu bằng /admin/ CHỈ được
                         // phép cho người dùng có vai trò ADMIN

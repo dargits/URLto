@@ -264,7 +264,7 @@
                 <a href="#" id="nav-home" data-i18n-key="trang-chu" data-action="go-home"
                     class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TRANG
                     CHỦ</a>
-                <a href="#" id="nav-publisher-rates" data-i18n-key="bang-gia"
+                <a href="${backendUrl}/payout-rates" id="nav-publisher-rates" data-action="go-payout-rates"
                     class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẢNG
                     GIÁ</a>
                 <a href="#" id="nav-payment-proof" data-i18n-key="bang-chung-thanh-toan"
@@ -843,6 +843,19 @@
                     e.preventDefault();
                     if (backendUrl) {
                         window.location.href = backendUrl; // Navigate to the base domain
+                    } else {
+                        console.error('Backend URL not available for home navigation.');
+                    }
+                });
+            });
+
+            const payout_rates = document.querySelectorAll('[data-action="go-payout-rates"]');
+            payout_rates.forEach(link => {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    if (backendUrl) {
+                        window.location.href = `${backendUrl}/payout-rates`; // Navigate to the constructed URL
+
                     } else {
                         console.error('Backend URL not available for home navigation.');
                     }

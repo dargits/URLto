@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">urlto - Đăng Nhập</title>
+    <title id="page-title">urlto - Bảng điều khiển</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
@@ -16,10 +16,10 @@
             padding: 0;
             overflow-x: hidden;
             background: linear-gradient(180deg, #0d1117 0%, #1a202c 100%);
-            /* Unified background */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            color: #c9d1d9;
         }
 
         /* Apply Noto Color Emoji to specific elements or globally if needed */
@@ -30,7 +30,18 @@
             /* Make emoji flags larger */
         }
 
-        /* Navbar and Dropdown styles */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        /* Navbar and Dropdown styles from index.html */
         .mobile-menu-transition {
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
             transform: translateY(-100%);
@@ -62,17 +73,19 @@
             opacity: 1;
         }
 
-        /* Form specific styles */
-        .form-container {
+        /* Custom styles for professional dashboard look */
+        .dashboard-card {
             background-color: #1a202c;
-            /* Darker background for the form card */
-            border-radius: 0.75rem;
-            /* Tailwind: rounded-lg */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            /* Tailwind: shadow-xl */
+            /* Darker background for cards, similar to login form container */
+            border: 1px solid #2d3748;
+            /* Subtle border, similar to input fields */
+            color: #e2e8f0;
+            /* Text color inside cards */
         }
 
-        .input-field {
+        input,
+        select,
+        textarea {
             background-color: #2d3748;
             /* Tailwind: bg-gray-700 */
             color: #e2e8f0;
@@ -87,7 +100,9 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .input-field:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: #4299e1;
             /* Tailwind: border-blue-500 */
@@ -95,77 +110,73 @@
             /* Tailwind: ring-2 ring-blue-500 */
         }
 
-        .submit-button {
-            background-color: #4299e1;
-            /* Tailwind: bg-blue-500 */
-            color: white;
-            padding: 0.75rem 1.5rem;
-            /* Tailwind: py-3 px-6 */
-            border-radius: 0.5rem;
-            /* Tailwind: rounded-md */
-            font-weight: 600;
-            /* Tailwind: font-semibold */
-            transition: background-color 0.2s, transform 0.2s;
+        button {
+            transition: background-color 0.2s ease-in-out, transform 0.2s;
         }
 
-        .submit-button:hover {
+        .bg-blue-600 {
+            /* Primary button color */
+            background-color: #4299e1;
+            /* Tailwind: bg-blue-500 */
+        }
+
+        .bg-blue-600:hover {
             background-color: #3182ce;
             /* Tailwind: hover:bg-blue-600 */
             transform: translateY(-2px);
             /* Simple hover effect */
         }
 
-        .submit-button:active {
+        .bg-blue-600:active {
             transform: translateY(0);
         }
 
-        .message {
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-            display: none;
-            text-align: center;
-        }
-
-        .message.success {
-            background-color: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-        }
-
-        .message.error {
+        .error-message {
             background-color: rgba(239, 68, 68, 0.1);
             color: #ef4444;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .success-message {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
         }
     </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
 
     <nav class="relative z-10 flex items-center justify-between p-4 md:p-6 lg:px-12 bg-gray-900 shadow-md">
         <div class="flex items-center space-x-2">
+            <button id="mobile-menu-button"
+                class="text-white focus:outline-none md:hidden p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-all duration-200">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
             <span id="site-name" class="text-xl md:text-2xl font-bold text-white">urlto</span>
         </div>
 
-        <div class="md:hidden">
-            <button id="mobile-menu-button"
-                class="text-white focus:outline-none p-2 rounded-md hover:bg-white hover:bg-opacity-20 transition-all duration-200">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
-        </div>
-
         <div class="hidden md:flex items-center space-x-6">
-            <a href="#" id="nav-home" data-i18n-key="trang-chu" data-action="go-home"
-                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TRANG
-                CHỦ</a>
-            <a href="#" id="nav-publisher-rates" data-action="go-payout-rates"
+            <a href="#" id="nav-dashboard" data-i18n-key="dashboard"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">BẢNG
+                ĐIỀU KHIỂN</a>
+            <a href="#" id="nav-create-link" data-i18n-key="tao-link-moi"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TẠO
+                LINK MỚI</a>
+            <a href="#" id="nav-manage-links" data-i18n-key="quan-ly-link"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">QUẢN
+                LÝ LINK</a>
+            <a href="#" id="nav-payout-rates" data-i18n-key="ty-gia-thanh-toan"
                 class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">TỶ
                 GIÁ THANH TOÁN</a>
-            <a href="#" id="nav-login" data-action="go-login"
-                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">ĐĂNG
-                NHẬP</a>
-            <a href="#" id="nav-register" data-action="go-register"
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md transform hover:scale-105">ĐĂNG
-                KÝ</a>
+            <a href="#" id="nav-statistics" data-i18n-key="thong-ke"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">THỐNG
+                KÊ</a>
+            <a href="#" id="nav-settings" data-i18n-key="cai-dat"
+                class="text-white hover:text-blue-300 transition-colors duration-200 font-medium px-2 py-1 rounded-md hover:bg-white hover:bg-opacity-10">CÀI
+                ĐẶT</a>
 
             <div class="relative">
                 <button id="language-button-desktop"
@@ -186,6 +197,9 @@
                     </a>
                 </div>
             </div>
+            <a href="#" id="nav-logout" data-i18n-key="dang-xuat"
+                class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-md transform hover:scale-105">ĐĂNG
+                XUẤT</a>
         </div>
     </nav>
 
@@ -198,18 +212,24 @@
             </button>
         </div>
         <div class="flex flex-col space-y-6 text-center w-full max-w-sm">
-            <a href="#" id="mobile-nav-home" data-i18n-key="trang-chu" data-action="go-home"
-                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">TRANG
-                CHỦ</a>
-            <a href="#" id="mobile-nav-publisher-rates" data-action="go-payout-rates"
+            <a href="#" id="mobile-nav-dashboard" data-i18n-key="dashboard"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">BẢNG
+                ĐIỀU KHIỂN</a>
+            <a href="#" id="mobile-nav-create-link" data-i18n-key="tao-link-moi"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">TẠO
+                LINK MỚI</a>
+            <a href="#" id="mobile-nav-manage-links" data-i18n-key="quan-ly-link"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">QUẢN
+                LÝ LINK</a>
+            <a href="#" id="mobile-nav-payout-rates" data-i18n-key="ty-gia-thanh-toan"
                 class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">TỶ
                 GIÁ THANH TOÁN</a>
-            <a href="#" id="mobile-nav-login" data-action="go-login"
-                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">ĐĂNG
-                NHẬP</a>
-            <a href="#" id="mobile-nav-register" data-action="go-register"
-                class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md w-max mx-auto transform hover:scale-105">ĐĂNG
-                KÝ</a>
+            <a href="#" id="mobile-nav-statistics" data-i18n-key="thong-ke"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">THỐNG
+                KÊ</a>
+            <a href="#" id="mobile-nav-settings" data-i18n-key="cai-dat"
+                class="text-white text-xl font-medium py-2 rounded-md hover:bg-gray-800 transition-colors duration-200">CÀI
+                ĐẶT</a>
 
             <div class="relative w-max mx-auto">
                 <button id="language-button-mobile"
@@ -230,51 +250,114 @@
                     </a>
                 </div>
             </div>
+            <a href="#" id="mobile-nav-logout" data-i18n-key="dang-xuat"
+                class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-md w-max mx-auto transform hover:scale-105">ĐĂNG
+                XUẤT</a>
         </div>
     </div>
 
 
-    <main class="flex-grow flex items-center justify-center px-4 py-8">
-        <div class="form-container w-full max-w-md p-8 text-gray-200">
-            <h2 class="text-3xl font-bold text-center mb-6" data-i18n-key="dang-nhap">Đăng Nhập</h2>
+    <div class="flex-grow p-6 lg:p-8">
+        <h1 class="text-3xl font-bold mb-8 text-white" data-i18n-key="chao-mung-tro-lai-tai-khoan-admin">Chào mừng trở
+            lại tài khoản Admin!</h1>
 
-            <form id="login-form">
-                <div class="mb-4">
-                    <label for="account" class="block text-gray-300 text-sm font-bold mb-2"
-                        data-i18n-key="ten-tai-khoan">
-                        Tên tài khoản hoặc Email
-                    </label>
-                    <input type="text" id="account" placeholder="Nhập tên tài khoản hoặc email của bạn"
-                        class="input-field" required />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="dashboard-card p-6 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-400" data-i18n-key="tong-luot-xem">Tổng lượt xem</h3>
+                    <p class="text-3xl font-bold text-green-400 mt-2">1,234</p>
                 </div>
-                <div class="mb-6">
-                    <label for="password" class="block text-gray-300 text-sm font-bold mb-2" data-i18n-key="mat-khau">
-                        Mật khẩu
-                    </label>
-                    <input type="password" id="password" placeholder="Nhập mật khẩu của bạn" class="input-field"
-                        required />
+                <i class="fas fa-eye text-5xl text-gray-600"></i>
+            </div>
+            <div class="dashboard-card p-6 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-400" data-i18n-key="tong-thu-nhap">Tổng thu nhập</h3>
+                    <p class="text-3xl font-bold text-yellow-400 mt-2">$123.45</p>
                 </div>
-                <div class="flex items-center justify-between mb-6">
-                    <button type="submit" id="login-button"
-                        class="submit-button w-full focus:outline-none focus:shadow-outline">
-                        <i class="fas fa-sign-in-alt mr-2"></i> <span data-i18n-key="dang-nhap-button">Đăng Nhập</span>
-                    </button>
+                <i class="fas fa-dollar-sign text-5xl text-gray-600"></i>
+            </div>
+            <div class="dashboard-card p-6 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-400" data-i18n-key="link-hoat-dong">Link hoạt động</h3>
+                    <p class="text-3xl font-bold text-blue-400 mt-2">56</p>
                 </div>
-                <div id="login-message" class="message" style="display: none;"></div>
-                <p class="text-center text-gray-400 text-sm mt-4">
-                    <span data-i18n-key="khong-co-tai-khoan">Bạn chưa có tài khoản?</span>
-                    <a href="#" id="signup-link" data-action="go-register"
-                        class="text-blue-400 hover:text-blue-300 transition-colors duration-200 ml-1"
-                        data-i18n-key="dang-ky-ngay">Đăng ký ngay</a>
-                </p>
-                <p class="text-center text-gray-400 text-sm mt-2">
-                    <a href="#" id="forgot-password-link"
-                        class="text-blue-400 hover:text-blue-300 transition-colors duration-200"
-                        data-i18n-key="quen-mat-khau">Quên mật khẩu?</a>
-                </p>
-            </form>
+                <i class="fas fa-link text-5xl text-gray-600"></i>
+            </div>
+            <div class="dashboard-card p-6 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-400" data-i18n-key="dang-cho-xu-ly">Đang chờ xử lý</h3>
+                    <p class="text-3xl font-bold text-purple-400 mt-2">3</p>
+                </div>
+                <i class="fas fa-hourglass-half text-5xl text-gray-600"></i>
+            </div>
         </div>
-    </main>
+
+        <h2 class="text-2xl font-bold mb-6 text-white" data-i18n-key="link-gan-day">Link gần đây</h2>
+        <div class="dashboard-card p-6 rounded-lg shadow-md overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-700">
+                <thead>
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                            data-i18n-key="url-goc">URL Gốc</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                            data-i18n-key="link-rut-gon">Link rút gọn</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                            data-i18n-key="luot-xem">Lượt xem</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                            data-i18n-key="ngay-tao">Ngày tạo</th>
+                        <th scope="col" class="relative px-6 py-3">
+                            <span class="sr-only" data-i18n-key="hanh-dong">Hành động</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">
+                            https://www.google.com/search?q=example+long+url+here
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-400">
+                            <a href="https://urlto.me/abcde" target="_blank" class="hover:underline">urlto.me/abcde</a>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            150
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            2024-07-29
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-400 hover:text-indigo-600 mr-2" data-i18n-key="chinh-sua">Chỉnh
+                                sửa</button>
+                            <button class="text-red-400 hover:text-red-600" data-i18n-key="xoa">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">
+                            https://github.com/dargits/urlto-shortener
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-400">
+                            <a href="https://urlto.me/github-urlto" target="_blank"
+                                class="hover:underline">urlto.me/github-urlto</a>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            80
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            2024-07-28
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-indigo-400 hover:text-indigo-600 mr-2" data-i18n-key="chinh-sua">Chỉnh
+                                sửa</button>
+                            <button class="text-red-400 hover:text-red-600" data-i18n-key="xoa">Xóa</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <footer class="bg-black text-white py-10 px-4">
         <div class="container mx-auto text-center md:flex md:justify-between md:items-center">
@@ -301,7 +384,6 @@
         </div>
     </footer>
 
-
     <script>
         // Global variables for backend URL and app info
         let backendUrl = '';
@@ -310,66 +392,87 @@
 
         // Map of translatable elements and their translations
         const translatableElements = {
-            'trang-chu': {
-                'vi': 'TRANG CHỦ',
-                'en': 'HOME'
+            'dashboard': {
+                'vi': 'BẢNG ĐIỀU KHIỂN',
+                'en': 'DASHBOARD'
+            },
+            'tao-link-moi': { // New translation key for "Create Link"
+                'vi': 'TẠO LINK MỚI',
+                'en': 'CREATE LINK'
+            },
+            'quan-ly-link': {
+                'vi': 'QUẢN LÝ LINK',
+                'en': 'MANAGE LINKS'
             },
             'ty-gia-thanh-toan': {
                 'vi': 'TỶ GIÁ THANH TOÁN',
                 'en': 'PAYOUT RATES'
             },
-            'dang-nhap': {
-                'vi': 'ĐĂNG NHẬP',
-                'en': 'LOGIN'
+            'thong-ke': {
+                'vi': 'THỐNG KÊ',
+                'en': 'STATISTICS'
             },
-            'dang-ky': {
-                'vi': 'ĐĂNG KÝ',
-                'en': 'REGISTER'
+            'cai-dat': {
+                'vi': 'CÀI ĐẶT',
+                'en': 'SETTINGS'
             },
-            'ten-tai-khoan': {
-                'vi': 'Tên tài khoản hoặc Email',
-                'en': 'Username or Email'
+            'dang-xuat': {
+                'vi': 'ĐĂNG XUẤT',
+                'en': 'LOGOUT'
             },
-            'mat-khau': {
-                'vi': 'Mật khẩu',
-                'en': 'Password'
+            'chao-mung-tro-lai-tai-khoan-admin': {
+                'vi': 'Chào mừng trở lại tài khoản Admin!',
+                'en': 'Welcome back, Admin Account!'
             },
-            'dang-nhap-button': {
-                'vi': 'Đăng Nhập',
-                'en': 'Login'
+            'tong-luot-xem': {
+                'vi': 'Tổng lượt xem',
+                'en': 'Total Views'
             },
-            'khong-co-tai-khoan': {
-                'vi': 'Bạn chưa có tài khoản?',
-                'en': 'Don\'t have an account?'
+            'tong-thu-nhap': {
+                'vi': 'Tổng thu nhập',
+                'en': 'Total Earnings'
             },
-            'dang-ky-ngay': {
-                'vi': 'Đăng ký ngay',
-                'en': 'Sign up now'
+            'link-hoat-dong': {
+                'vi': 'Link hoạt động',
+                'en': 'Active Links'
             },
-            'quen-mat-khau': {
-                'vi': 'Quên mật khẩu?',
-                'en': 'Forgot password?'
+            'dang-cho-xu-ly': {
+                'vi': 'Đang chờ xử lý',
+                'en': 'Pending'
             },
-            'dang-nhap-thanh-cong': {
-                'vi': 'Đăng nhập thành công! Đang chuyển hướng...',
-                'en': 'Login successful! Redirecting...'
+            'link-gan-day': {
+                'vi': 'Link gần đây',
+                'en': 'Recent Links'
             },
-            'ten-tai-khoan-hoac-mat-khau-khong-dung': {
-                'vi': 'Tên tài khoản hoặc mật khẩu không đúng.',
-                'en': 'Incorrect username or password.'
+            'url-goc': {
+                'vi': 'URL Gốc',
+                'en': 'Original URL'
             },
-            'loi-khong-xac-dinh': {
-                'vi': 'Đã xảy ra lỗi không xác định. Vui lòng thử lại.',
-                'en': 'An unknown error occurred. Please try again.'
+            'link-rut-gon': {
+                'vi': 'Link rút gọn',
+                'en': 'Shortened Link'
             },
-            'khong-the-ket-noi-den-may-chu': {
-                'vi': 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.',
-                'en': 'Cannot connect to the server. Please check your network connection or try again later.'
+            'luot-xem': {
+                'vi': 'Lượt xem',
+                'en': 'Views'
             },
-            'page-title-login': {
-                'vi': 'Đăng Nhập',
-                'en': 'Login'
+            'ngay-tao': {
+                'vi': 'Ngày tạo',
+                'en': 'Created Date'
             },
+            'hanh-dong': {
+                'vi': 'Hành động',
+                'en': 'Action'
+            },
+            'chinh-sua': {
+                'vi': 'Chỉnh sửa',
+                'en': 'Edit'
+            },
+            'xoa': {
+                'vi': 'Xóa',
+                'en': 'Delete'
+            },
+            // Added from index.html/login.html for consistency
             'copyright': {
                 'vi': `&copy; 2025 %WEB_NAME%. Tất cả các quyền được bảo lưu.`,
                 'en': `&copy; 2025 %WEB_NAME%. All rights reserved.`
@@ -400,7 +503,7 @@
         function translatePage(lang) {
             currentLang = lang; // Update current language global variable
             document.documentElement.lang = lang; // Update HTML lang attribute
-            localStorage.setItem('preferredLang', lang); // Save language to localStorage
+            localStorage.setItem('preferredLang', lang); // Lưu ngôn ngữ vào localStorage
 
             for (const key in translatableElements) {
                 const elements = document.querySelectorAll(`[data-i18n-key="${key}"]`);
@@ -424,7 +527,7 @@
                 });
             }
 
-            const titleBase = translatableElements['page-title-login'][lang];
+            const titleBase = lang === 'vi' ? 'Bảng điều khiển' : 'Dashboard';
             document.getElementById('page-title').textContent = `${appInfo.webName || 'urlto'} - ${titleBase}`;
         }
 
@@ -479,7 +582,7 @@
                 const siteNames = document.querySelectorAll('#site-name');
                 siteNames.forEach(el => el.textContent = appInfo.webName);
 
-                const titleBase = translatableElements['page-title-login'][currentLang];
+                const titleBase = currentLang === 'vi' ? 'Bảng điều khiển' : 'Dashboard';
                 document.getElementById('page-title').textContent = `${appInfo.webName} - ${titleBase}`;
 
                 const footerSiteName = document.getElementById('footer-site-name');
@@ -516,88 +619,6 @@
             translatePage(currentLang); // Ensure initial translation applies after appInfo is loaded
 
 
-            const loginForm = document.getElementById('login-form');
-            const accountInput = document.getElementById('account'); // Changed from usernameInput
-            const passwordInput = document.getElementById('password');
-            const loginButton = document.getElementById('login-button');
-            const loginMessage = document.getElementById('login-message');
-
-            const AUTH_V1_PATH = "/api/v1/auth"; // Defined by user
-            const LOGIN_ENDPOINT = `${backendUrl}${AUTH_V1_PATH}/login`; // Corrected endpoint
-
-
-            loginForm.addEventListener('submit', async function (event) {
-                event.preventDefault(); // Prevent default form submission
-
-                loginMessage.style.display = 'none'; // Hide previous messages
-                loginMessage.classList.remove('success', 'error');
-                loginMessage.textContent = '';
-
-                loginButton.disabled = true;
-                loginButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ${currentLang === 'vi' ? 'Đang xử lý...' : 'Processing...'}`;
-
-                const account = accountInput.value.trim(); // Changed from username
-                const password = passwordInput.value.trim();
-
-                try {
-                    const response = await fetch(LOGIN_ENDPOINT, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            account: account, // Changed key from username to account
-                            password: password
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) { // HTTP status 200-299 indicates success
-                        loginMessage.classList.add('success');
-                        loginMessage.textContent = translatableElements['dang-nhap-thanh-cong'][currentLang];
-                        loginMessage.style.display = 'block';
-
-                        // Check if data.data exists and contains the JWT token
-                        if (data.data && typeof data.data === 'string') {
-                            localStorage.setItem('jwt_token', data.data); // Store the JWT token
-                            console.log('JWT Token stored:', data.data);
-                            // Redirect to dashboard after a short delay for message to be seen
-                            setTimeout(() => {
-                                window.location.href = `${backendUrl}/dashboard`;
-                            }, 1500);
-                        } else {
-                            console.error('Login successful but no JWT token received:', data);
-                            loginMessage.classList.remove('success');
-                            loginMessage.classList.add('error');
-                            loginMessage.textContent = translatableElements['loi-khong-xac-dinh'][currentLang];
-                        }
-
-                    } else {
-                        // Handle errors (e.g., 401 Unauthorized, 400 Bad Request)
-                        loginMessage.classList.add('error');
-                        if (data && data.message) {
-                            loginMessage.textContent = data.message;
-                        } else if (response.status === 401) {
-                            loginMessage.textContent = translatableElements['ten-tai-khoan-hoac-mat-khau-khong-dung'][currentLang];
-                        } else {
-                            loginMessage.textContent = translatableElements['loi-khong-xac-dinh'][currentLang];
-                        }
-                        loginMessage.style.display = 'block';
-                    }
-                } catch (error) {
-                    console.error('Error during login fetch:', error);
-                    loginMessage.classList.add('error');
-                    loginMessage.textContent = translatableElements['khong-the-ket-noi-den-may-chu'][currentLang];
-                    loginMessage.style.display = 'block';
-                } finally {
-                    loginButton.disabled = false;
-                    loginButton.innerHTML = `<i class="fas fa-sign-in-alt mr-2"></i> <span data-i18n-key="dang-nhap-button">Đăng Nhập</span>`;
-                    translatePage(currentLang); // Re-apply button text after reset
-                }
-            });
-
-
             // --- Navigation Link Handlers ---
             // Generic function for navigation actions
             function setupNavLink(id, relativePath) {
@@ -615,22 +636,27 @@
             }
 
             // Mapped to WebControler.java
-            setupNavLink('nav-home', '/');
-            setupNavLink('mobile-nav-home', '/');
+            setupNavLink('nav-dashboard', '/dashboard');
+            setupNavLink('mobile-nav-dashboard', '/dashboard');
 
-            setupNavLink('nav-publisher-rates', '/payout-rates');
-            setupNavLink('mobile-nav-publisher-rates', '/payout-rates');
+            // New link for Create Link page
+            setupNavLink('nav-create-link', '/create-link');
+            setupNavLink('mobile-nav-create-link', '/create-link');
 
-            setupNavLink('nav-login', '/auth/login');
-            setupNavLink('mobile-nav-login', '/auth/login');
 
-            setupNavLink('signup-link', '/auth/register'); // For the "Sign up now" link
-            setupNavLink('nav-register', '/auth/register');
-            setupNavLink('mobile-nav-register', '/auth/register');
+            setupNavLink('nav-payout-rates', '/payout-rates');
+            setupNavLink('mobile-nav-payout-rates', '/payout-rates');
 
+            setupNavLink('nav-logout', '/auth/logout');
+            setupNavLink('mobile-nav-logout', '/auth/logout');
 
             // Keep as placeholders if no direct WebController mapping is found
-            document.getElementById('forgot-password-link')?.addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('nav-manage-links')?.addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('mobile-nav-manage-links')?.addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('nav-statistics')?.addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('mobile-nav-statistics')?.addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('nav-settings')?.addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('mobile-nav-settings')?.addEventListener('click', (e) => e.preventDefault());
 
 
             // Mobile Menu Logic (from index.html)

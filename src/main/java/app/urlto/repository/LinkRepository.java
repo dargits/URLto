@@ -3,11 +3,9 @@ package app.urlto.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import app.urlto.entity.Role;
+import app.urlto.entity.Link;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-
-    Role findByRoleName(String roleName);
-
+public interface LinkRepository extends JpaRepository<Link, Long> {
+    boolean existsByShortCode(String shortCode);
 }

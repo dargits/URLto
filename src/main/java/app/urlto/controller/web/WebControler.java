@@ -22,4 +22,19 @@ public class WebControler {
     public String register() {
         return "auth/register.html";
     }
+
+    @GetMapping("payout-rates")
+    public String payoutRates() {
+        return "payoutrates.html";
+    }
+
+    @GetMapping("create-link")
+    public String createLink() {
+        return "create-link.html";
+    }
+
+    @GetMapping("dashboard")
+    public String getDashBoard() {
+        return "dashboard.html";
+    }
 }
